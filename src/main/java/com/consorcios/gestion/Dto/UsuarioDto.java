@@ -3,8 +3,7 @@ package com.consorcios.gestion.Dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Getter
-@Setter
+@Getter @Setter
 public class UsuarioDto {
     
     @NotBlank
@@ -25,6 +24,7 @@ public class UsuarioDto {
     private int telefono;
 
     public UsuarioDto() {
+        
     }
 
     public UsuarioDto(Integer id_consorcio, Integer id_tarifa, Integer num_conex, String nombre, Integer dni, String domicilio, String email, int telefono) {

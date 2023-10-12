@@ -1,11 +1,11 @@
 package com.consorcios.gestion.Service;
 
-import com.consorcios.gestion.Entity.Usuario;
-import com.consorcios.gestion.Repository.UsuarioRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.consorcios.gestion.Entity.Usuario;
 import org.springframework.stereotype.Service;
+import com.consorcios.gestion.Repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ImplementUsuarioService {
@@ -24,8 +24,8 @@ public class ImplementUsuarioService {
         return usuarioRepository.findByNombre(nombre);
     }
     
-    public void save(Usuario educacion){
-        usuarioRepository.save(educacion);
+    public void save(Usuario usuario){
+        usuarioRepository.save(usuario);
     }
     
     public void delete(int id){

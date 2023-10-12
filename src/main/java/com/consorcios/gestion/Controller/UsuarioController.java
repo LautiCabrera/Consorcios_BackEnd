@@ -1,14 +1,13 @@
 package com.consorcios.gestion.Controller;
 
-import com.consorcios.gestion.Dto.UsuarioDto;
+import java.util.List;
+import org.springframework.http.*;
+import org.apache.commons.lang3.StringUtils;
 import com.consorcios.gestion.Entity.Usuario;
+import com.consorcios.gestion.Dto.UsuarioDto;
 import com.consorcios.gestion.Security.Controller.Mensaje;
 import com.consorcios.gestion.Service.ImplementUsuarioService;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -76,7 +75,6 @@ public class UsuarioController {
         
         return new ResponseEntity(new Mensaje("Usuario actualizado"), HttpStatus.OK);
     }
-
     
 }
 
