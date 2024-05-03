@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Mi carrera perfecta</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Bienvenido</h1>
+        <!-- Utiliza una etiqueta "a" con th:href para enlazar dinámicamente la URL y th:onclick para manejar el evento de clic -->
+        <a th:href="@{/carreras}" th:onclick="return handleClick(event)">Mostrar todas las carreras</a>
+
+        <script>
+            // Función para manejar el evento de clic en el enlace
+            function handleClick(event) {
+            // Evita que la navegación estándar de la etiqueta "a" ocurra
+            event.preventDefault();
+
+            // Obtiene la URL del enlace
+            var url = event.currentTarget.getAttribute("href");
+
+            // Redirige a la URL utilizando JavaScript
+            window.location.href = url;
+            }
+        </script>
+    </body>
+</html>
