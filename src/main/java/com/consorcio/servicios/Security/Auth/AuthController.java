@@ -12,15 +12,18 @@ public class AuthController {
     
     private final AuthService authService;
     
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "/login")
     public ResponseEntity<JwtDto> login(@RequestBody LoginRequest request){
         JwtDto response = authService.login(request);
+        System.out.println(response);
         return ResponseEntity.ok(response);
     }
     
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(authService.userRegister(request));
+    public AuthResponse register(@RequestBody RegisterRequest request){
+        AuthResponse response = authService.userRegister(request);
+        return response;
     }
 
 }
