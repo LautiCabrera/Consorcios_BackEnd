@@ -2,11 +2,13 @@ package com.consorcio.servicios.Security.Auth;
 
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
+import com.consorcio.servicios.Security.Dto.JwtDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,16 +22,28 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+    public JwtDto login(LoginRequest request){
+        
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        
         String token = jwtService.getToken(user);
-        return AuthResponse.builder()
+        
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        
+        // Crear un objeto AuthResponse con el token
+        AuthResponse builder = AuthResponse.builder()
                 .token(token)
-                .build();    
+                .build();
+
+        // Crear un JwtDto con el token y las autoridades
+        JwtDto jwt = new JwtDto(builder.getToken(), userDetails.getAuthorities());
+
+        return jwt;
     }
     
-    public AuthResponse register(RegisterRequest request){
+    public AuthResponse userRegister(RegisterRequest request){
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode( request.getPassword()))
@@ -37,13 +51,13 @@ public class AuthService {
                 .lastname(request.getLastname())
                 .phone(request.getPhone())
                 .dni(request.getDni())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
         userRepository.save(user);
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
-
     }
+    
 }

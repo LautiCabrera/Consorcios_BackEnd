@@ -1,14 +1,13 @@
 package com.consorcio.servicios.Security.Auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class AuthResponse {
+    
     String token;
+    
 }
