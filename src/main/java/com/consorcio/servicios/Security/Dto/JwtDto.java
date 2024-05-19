@@ -1,16 +1,25 @@
 package com.consorcio.servicios.Security.Dto;
 
-import java.util.Collection;
-import org.springframework.security.core.GrantedAuthority;
+import java.util.List;
 
 public class JwtDto {
-    
-    private String token;
-    private Collection <? extends GrantedAuthority > authorities;
 
-    public JwtDto(String token, Collection<? extends GrantedAuthority> authorities) {
+    private String token;
+    private List<String> authorities;
+    private boolean isLogin;
+
+    public JwtDto(String token, List<String> authorities, boolean isLogin) {
         this.token = token;
         this.authorities = authorities;
+        this.isLogin = isLogin;
+    }
+
+    public boolean isIsLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(boolean isLogin) {
+        this.isLogin = isLogin;
     }
 
     public String getToken() {
@@ -21,12 +30,12 @@ public class JwtDto {
         this.token = token;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<String> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+    public void setAuthorities(List<String> authorities) {
         this.authorities = authorities;
     }
-    
+
 }

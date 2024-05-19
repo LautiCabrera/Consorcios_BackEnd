@@ -9,5 +9,5 @@ import lombok.*;
 public class AuthResponse {
     
     String token;
-    
+    private boolean isLogin;
 }
