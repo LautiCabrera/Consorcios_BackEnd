@@ -1,4 +1,4 @@
-package com.consorcio.servicios.Security.Auth;
+package com.consorcio.servicios.Security.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

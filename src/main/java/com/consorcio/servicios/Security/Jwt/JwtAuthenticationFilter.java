@@ -1,5 +1,6 @@
 package com.consorcio.servicios.Security.Jwt;
 
+import com.consorcio.servicios.Security.Service.JwtService;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
