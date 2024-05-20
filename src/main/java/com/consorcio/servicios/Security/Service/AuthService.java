@@ -1,10 +1,12 @@
-package com.consorcio.servicios.Security.Auth;
+package com.consorcio.servicios.Security.Service;
 
+import com.consorcio.servicios.Security.Entity.AuthResponse;
+import com.consorcio.servicios.Security.Entity.RegisterRequest;
+import com.consorcio.servicios.Security.Entity.LoginRequest;
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
 import com.consorcio.servicios.Security.Dto.JwtDto;
 import com.consorcio.servicios.Security.Enums.Role;
-import com.consorcio.servicios.Security.Jwt.JwtService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -34,17 +36,13 @@ public class AuthService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // Convertir las authorities a una lista de strings
         List<String> authorities = userDetails.getAuthorities().stream()
                 .map(authority -> authority.getAuthority())
                 .collect(Collectors.toList());
         
-        //Asigna valor isLogin
         boolean isLogin = authentication.isAuthenticated();
         
-        // Crear un JwtDto con el token, autoridades y estado del login
-          return new JwtDto(token, authorities, isLogin);
-
+        return new JwtDto(token, authorities, isLogin);
     }
 
     public AuthResponse userRegister(RegisterRequest request) {

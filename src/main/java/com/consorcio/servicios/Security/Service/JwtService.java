@@ -1,4 +1,4 @@
-package com.consorcio.servicios.Security.Jwt;
+package com.consorcio.servicios.Security.Service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

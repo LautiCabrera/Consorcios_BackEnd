@@ -1,5 +1,9 @@
-package com.consorcio.servicios.Security.Auth;
+package com.consorcio.servicios.Security.Controller;
 
+import com.consorcio.servicios.Security.Service.AuthService;
+import com.consorcio.servicios.Security.Entity.AuthResponse;
+import com.consorcio.servicios.Security.Entity.RegisterRequest;
+import com.consorcio.servicios.Security.Entity.LoginRequest;
 import com.consorcio.servicios.Security.Dto.JwtDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final AuthService authService;
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(value = "/login")
     public ResponseEntity<JwtDto> login(@RequestBody LoginRequest request) {
         JwtDto response = authService.login(request);
@@ -31,4 +35,5 @@ public class AuthController {
         AuthResponse response = authService.adminRegister(request);
         return response;
     }
+    
 }

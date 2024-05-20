@@ -1,4 +1,4 @@
-package com.consorcio.servicios.Security.Auth;
+package com.consorcio.servicios.Security.Entity;
 
 import lombok.*;
 
@@ -10,4 +10,5 @@ public class AuthResponse {
     
     String token;
     private boolean isLogin;
+    
 }
