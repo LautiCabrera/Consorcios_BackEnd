@@ -38,15 +38,33 @@ public class AuthService {
         List<String> authorities = userDetails.getAuthorities().stream()
                 .map(authority -> authority.getAuthority())
                 .collect(Collectors.toList());
-
-
+        
+        //Asigna valor isLogin
+        boolean isLogin = authentication.isAuthenticated();
+        
         // Crear un JwtDto con el token, autoridades y estado del login
-        JwtDto jwt = new JwtDto(token, authorities, true);
+          return new JwtDto(token, authorities, isLogin);
 
-        return jwt;
     }
 
     public AuthResponse userRegister(RegisterRequest request) {
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .phone(request.getPhone())
+                .dni(request.getDni())
+                .role(Role.ROLE_USER)
+                .build();
+        userRepository.save(user);
+
+        return AuthResponse.builder()
+                .token(jwtService.getToken(user))
+                .build();
+    }
+
+    public AuthResponse adminRegister(RegisterRequest request) {
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
