@@ -2,11 +2,6 @@ package com.consorcio.servicios.Security.Controller;
 
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
-import com.consorcio.servicios.Security.Service.AuthService;
-import com.consorcio.servicios.Security.Entity.AuthResponse;
-import com.consorcio.servicios.Security.Entity.RegisterRequest;
-import com.consorcio.servicios.Security.Entity.LoginRequest;
-import com.consorcio.servicios.Security.Dto.JwtDto;
 import com.consorcio.servicios.Security.Service.EmailService;
 import java.util.Map;
 import java.util.Optional;
@@ -24,31 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
-    private final AuthService authService;
     private final EmailService emailService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @PostMapping(value = "/login")
-    public ResponseEntity<JwtDto> login(@RequestBody LoginRequest request) {
-        JwtDto response = authService.login(request);
-        System.out.println(response);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(value = "/user/register")
-    public AuthResponse userRegister(@RequestBody RegisterRequest request) {
-        AuthResponse response = authService.userRegister(request);
-        return response;
-    }
-
-    @PostMapping(value = "/admin/register")
-    public AuthResponse adminRegister(@RequestBody RegisterRequest request) {
-        AuthResponse response = authService.adminRegister(request);
-        return response;
-    }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
@@ -87,4 +62,5 @@ public class AuthController {
 
         return ResponseEntity.ok("Contraseña modificada con exito");
     }
+
 }
