@@ -5,9 +5,10 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import java.security.Key;
+import com.consorcio.servicios.Entity.User;
 import java.util.*;
 import java.util.function.Function;
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
@@ -15,26 +16,30 @@ public class JwtService {
 
     @Value("${jwt.secret_key}")
     private String secret_key;
-    
-    @Value ("${jwt.expiration_time}")
+
+    @Value("${jwt.expiration_time}")
     private int expiration_time;
 
-    public String getToken(UserDetails user) {
+    public String getToken(User user) {
         return getToken(new HashMap<>(), user);
     }
 
-    private String getToken(Map<String, Object> extraClaims, UserDetails user) {
+    private String getToken(Map<String, Object> extraClaims, User user) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expiration_time))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .claims(extraClaims)
+                .claim("userId", user.getId_user())
+                .claim(("firstName"), user.getFirstname())
+                .claim("lastName", user.getLastname())
+                .claim("role", user.getRole())
+                .subject(user.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * expiration_time))
+                .signWith(getKey())
                 .compact();
     }
 
-    private Key getKey() {
+    private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secret_key);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -50,11 +55,11 @@ public class JwtService {
 
     private Claims getAllClaims(String token) {
         return Jwts
-                .parserBuilder()
-                .setSigningKey(getKey())
+                .parser()
+                .verifyWith(getKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
