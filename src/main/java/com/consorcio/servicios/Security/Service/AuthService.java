@@ -7,6 +7,9 @@ import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
 import com.consorcio.servicios.Security.Enums.Role;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +20,12 @@ public class AuthService {
         private final UserRepository userRepository;
         private final JwtService jwtService;
         private final PasswordEncoder passwordEncoder;
+        private final AuthenticationManager authenticationManager;
 
         public AuthResponse login(LoginRequest request) {
+
+                authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
                 User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
