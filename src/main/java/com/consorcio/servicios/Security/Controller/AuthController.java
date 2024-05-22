@@ -1,7 +1,7 @@
 package com.consorcio.servicios.Security.Controller;
 
 import com.consorcio.servicios.Entity.User;
-import com.consorcio.servicios.Repository.UserRepository;
+import com.consorcio.servicios.Security.Repository.RecoverPassRepository;
 import com.consorcio.servicios.Security.Service.EmailService;
 import java.util.Map;
 import java.util.Optional;
@@ -21,14 +21,14 @@ public class AuthController {
 
     private final EmailService emailService;
     @Autowired
-    private UserRepository userRepository;
+    private RecoverPassRepository recoverPassRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
-        Optional<User> userOptional = userRepository.findByUsername(email);
+        Optional<User> userOptional = recoverPassRepository.findByUsername(email);
 
         if (!userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
@@ -37,7 +37,7 @@ public class AuthController {
         User user = userOptional.get();
         String token = UUID.randomUUID().toString();
         user.setResetToken(token);
-        userRepository.save(user);
+        recoverPassRepository.save(user);
 
         emailService.sendResetPasswordEmail(email, token);
 
@@ -49,7 +49,7 @@ public class AuthController {
         String token = request.get("token");
         String newPassword = request.get("newPassword");
 
-        Optional<User> userOptional = userRepository.findByResetToken(token);
+        Optional<User> userOptional = recoverPassRepository.findByResetToken(token);
 
         if (!userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token");
@@ -58,7 +58,7 @@ public class AuthController {
         User user = userOptional.get();
         user.setPassword(passwordEncoder.encode(newPassword));
         user.setResetToken(null);
-        userRepository.save(user);
+        recoverPassRepository.save(user);
 
         return ResponseEntity.ok("Contraseña modificada con exito");
     }
