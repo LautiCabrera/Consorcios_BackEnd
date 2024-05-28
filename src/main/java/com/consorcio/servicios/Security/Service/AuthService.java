@@ -1,18 +1,20 @@
 package com.consorcio.servicios.Security.Service;
 
-import com.consorcio.servicios.Security.Entity.AuthResponse;
-import com.consorcio.servicios.Security.Entity.RegisterRequest;
-import com.consorcio.servicios.Security.Entity.LoginRequest;
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
+import com.consorcio.servicios.Security.Dto.AuthResponseDto;
+import com.consorcio.servicios.Security.Dto.LoginRequestDto;
+import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -22,7 +24,7 @@ public class AuthService {
         private final PasswordEncoder passwordEncoder;
         private final AuthenticationManager authenticationManager;
 
-        public AuthResponse login(LoginRequest request) {
+        public AuthResponseDto login(LoginRequestDto request) {
 
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -31,10 +33,10 @@ public class AuthService {
 
                 String token = jwtService.getToken(user);
 
-                return new AuthResponse(token);
+                return new AuthResponseDto(token);
         }
 
-        public AuthResponse userRegister(RegisterRequest request) {
+        public AuthResponseDto register(@Valid RegisterRequestDto request, Role role) {
                 User user = User.builder()
                                 .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword()))
@@ -42,28 +44,11 @@ public class AuthService {
                                 .lastname(request.getLastname())
                                 .phone(request.getPhone())
                                 .dni(request.getDni())
-                                .role(Role.ROLE_USER)
+                                .role(role)
                                 .build();
                 userRepository.save(user);
 
-                return AuthResponse.builder()
-                                .token(jwtService.getToken(user))
-                                .build();
-        }
-
-        public AuthResponse adminRegister(RegisterRequest request) {
-                User user = User.builder()
-                                .username(request.getUsername())
-                                .password(passwordEncoder.encode(request.getPassword()))
-                                .firstname(request.getFirstname())
-                                .lastname(request.getLastname())
-                                .phone(request.getPhone())
-                                .dni(request.getDni())
-                                .role(Role.ROLE_ADMIN)
-                                .build();
-                userRepository.save(user);
-
-                return AuthResponse.builder()
+                return AuthResponseDto.builder()
                                 .token(jwtService.getToken(user))
                                 .build();
         }

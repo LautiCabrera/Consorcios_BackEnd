@@ -2,6 +2,7 @@ package com.consorcio.servicios.Entity;
 
 import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import lombok.*;
@@ -14,19 +15,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 public class User implements UserDetails {
-    
+
     @Id
     @GeneratedValue
     private int id_user;
     @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String firstname;
+    @Column(nullable = false)
     private String lastname;
+    @Column(nullable = false)
     private String password;
-    private String resetToken; 
+    private String resetToken;
+    private LocalDateTime tokenExpiration;
+    @Column(nullable = false)
     private int dni;
+    @Column(nullable = false)
     private int phone;
     @Enumerated(EnumType.STRING)
     Role role;
@@ -55,5 +62,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    
+
 }
