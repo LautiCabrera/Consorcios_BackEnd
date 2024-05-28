@@ -1,17 +1,11 @@
 package com.consorcio.servicios.Security.Controller;
 
 import com.consorcio.servicios.Security.Service.AuthService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.consorcio.servicios.Security.Dto.AuthResponseDto;
-import com.consorcio.servicios.Security.Dto.ForgotPassDto;
-import com.consorcio.servicios.Security.Dto.LoginRequestDto;
-import com.consorcio.servicios.Security.Dto.RecoverPassRequestDto;
-import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
+import com.consorcio.servicios.Security.Dto.*;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.RecoverPassService;
-import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,8 +15,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final RecoverPassService recoverPassService;
-    @Value("${mail.recover.expiration}")
-    long expiration;
 
     @PostMapping(value = "/login")
     public AuthResponseDto login(@RequestBody LoginRequestDto request) {
@@ -40,12 +32,12 @@ public class AuthController {
     }
 
     @PostMapping("/forgot")
-    public String forgotPassword(@RequestBody ForgotPassDto request) {
+    public MessageDto forgotPassword(@RequestBody ForgotPassDto request) {
         return recoverPassService.forgotPassword(request);
     }
 
     @PostMapping("/reset")
-    public String resetPassword(@RequestBody RecoverPassRequestDto request) {
+    public MessageDto resetPassword(@RequestBody RecoverPassRequestDto request) {
         return recoverPassService.resetPassword(request);
     }
 

@@ -10,8 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
-import com.consorcio.servicios.Security.Dto.ForgotPassDto;
-import com.consorcio.servicios.Security.Dto.RecoverPassRequestDto;
+import com.consorcio.servicios.Security.Dto.*;
 import com.consorcio.servicios.Security.Repository.RecoverPassRepository;
 
 @Service
@@ -40,13 +39,13 @@ public class RecoverPassService {
         javaMailSender.send(message);
     }
 
-    public String forgotPassword(ForgotPassDto request) {
+    public MessageDto forgotPassword(ForgotPassDto request) {
 
         String email = request.getEmail();
         Optional<User> userOptional = userRepository.findByUsername(email);
 
         if (!userOptional.isPresent()) {
-            return "Usuario no encontrado";
+            return new MessageDto("Usuario no encontrado");
         }
 
         User user = userOptional.get();
@@ -56,10 +55,10 @@ public class RecoverPassService {
         recoverPassRepository.save(user);
         sendResetPasswordEmail(email, token);
 
-        return "Correo electrónico de restablecimiento de contraseña enviado";
+        return new MessageDto("Correo electrónico de restablecimiento de contraseña enviado");
     }
 
-    public String resetPassword(RecoverPassRequestDto request) {
+    public MessageDto resetPassword(RecoverPassRequestDto request) {
 
         String token = request.getToken();
         String newPassword = request.getNewPassword();
@@ -67,13 +66,13 @@ public class RecoverPassService {
         Optional<User> userOptional = recoverPassRepository.findByResetToken(token);
 
         if (!userOptional.isPresent()) {
-            return "Token inválido";
+            return new MessageDto("Token inválido");
         }
 
         User user = userOptional.get();
 
         if (user.getTokenExpiration().isBefore(LocalDateTime.now())) {
-            return "Este link expiró";
+            return new MessageDto("Este link expiró");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -81,7 +80,7 @@ public class RecoverPassService {
         user.setTokenExpiration(null);
         recoverPassRepository.save(user);
 
-        return "Contraseña modificada con éxito";
+        return new MessageDto("Contraseña modificada con éxito");
     }
 
 }
