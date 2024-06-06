@@ -6,39 +6,44 @@ import org.springframework.web.bind.annotation.*;
 import com.consorcio.servicios.Security.Dto.*;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.RecoverPassService;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final AuthService authService;
     private final RecoverPassService recoverPassService;
-
+    
     @PostMapping(value = "/login")
-    public AuthResponseDto login(@RequestBody LoginRequestDto request) {
-        return authService.login(request);
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
+        AuthResponseDto response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/user/register")
-    public AuthResponseDto userRegister(@RequestBody RegisterRequestDto request) {
-        return authService.register(request, Role.ROLE_USER);
+    public ResponseEntity<AuthResponseDto> userRegister(@RequestBody RegisterRequestDto request) {
+        AuthResponseDto response = authService.register(request, Role.ROLE_USER);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "/admin/register")
-    public AuthResponseDto adminRegister(@RequestBody RegisterRequestDto request) {
-        return authService.register(request, Role.ROLE_ADMIN);
+    public ResponseEntity<AuthResponseDto> adminRegister(@RequestBody RegisterRequestDto request) {
+        AuthResponseDto response = authService.register(request, Role.ROLE_ADMIN);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/forgot")
-    public MessageDto forgotPassword(@RequestBody ForgotPassDto request) {
-        return recoverPassService.forgotPassword(request);
+    public ResponseEntity<MessageOkDto> forgotPassword(@RequestBody ForgotPassDto request) {
+        recoverPassService.forgotPassword(request);
+        return ResponseEntity.ok(new MessageOkDto("Correo electrónico de restablecimiento de contraseña enviado"));
     }
 
     @PostMapping("/reset")
-    public MessageDto resetPassword(@RequestBody RecoverPassRequestDto request) {
-        return recoverPassService.resetPassword(request);
+    public ResponseEntity<MessageOkDto> resetPassword(@RequestBody RecoverPassRequestDto request) {
+        recoverPassService.resetPassword(request);
+        return ResponseEntity.ok(new MessageOkDto("Contraseña cambiada con exito"));
     }
 
 }

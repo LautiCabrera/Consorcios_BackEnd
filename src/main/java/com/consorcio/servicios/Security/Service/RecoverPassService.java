@@ -12,6 +12,8 @@ import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Repository.UserRepository;
 import com.consorcio.servicios.Security.Dto.*;
 import com.consorcio.servicios.Security.Repository.RecoverPassRepository;
+import io.jsonwebtoken.MalformedJwtException;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 public class RecoverPassService {
@@ -34,18 +36,18 @@ public class RecoverPassService {
         message.setFrom(mailSend);
         message.setTo(email);
         message.setSubject("Cambio de contraseña");
-        message.setText("Para restablecer su contraseña, haga clic en el siguiente enlace: " +
-                "http://localhost:5173/changeCode?token=" + token);
+        message.setText("Para restablecer su contraseña, haga clic en el siguiente enlace: "
+                + "http://localhost:5173/changeCode?token=" + token);
         javaMailSender.send(message);
     }
 
-    public MessageDto forgotPassword(ForgotPassDto request) {
+    public void forgotPassword(ForgotPassDto request) {
 
         String email = request.getEmail();
         Optional<User> userOptional = userRepository.findByUsername(email);
 
         if (!userOptional.isPresent()) {
-            return new MessageDto("Usuario no encontrado");
+            throw new AccessDeniedException("Usuario no encontrado");
         }
 
         User user = userOptional.get();
@@ -55,10 +57,9 @@ public class RecoverPassService {
         recoverPassRepository.save(user);
         sendResetPasswordEmail(email, token);
 
-        return new MessageDto("Correo electrónico de restablecimiento de contraseña enviado");
     }
 
-    public MessageDto resetPassword(RecoverPassRequestDto request) {
+    public void resetPassword(RecoverPassRequestDto request) {
 
         String token = request.getToken();
         String newPassword = request.getNewPassword();
@@ -66,13 +67,13 @@ public class RecoverPassService {
         Optional<User> userOptional = recoverPassRepository.findByResetToken(token);
 
         if (!userOptional.isPresent()) {
-            return new MessageDto("Token inválido");
+            throw new MalformedJwtException("Token invalido:");
         }
 
         User user = userOptional.get();
 
         if (user.getTokenExpiration().isBefore(LocalDateTime.now())) {
-            return new MessageDto("Este link expiró");
+            throw new AccessDeniedException("El link expiro");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -80,7 +81,6 @@ public class RecoverPassService {
         user.setTokenExpiration(null);
         recoverPassRepository.save(user);
 
-        return new MessageDto("Contraseña modificada con éxito");
     }
 
 }

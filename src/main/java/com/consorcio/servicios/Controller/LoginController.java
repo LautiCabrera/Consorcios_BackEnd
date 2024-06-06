@@ -1,6 +1,7 @@
 package com.consorcio.servicios.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     
     @PostMapping(value = "/demo")
-    public String welcome(){
-        return "Welcome from secure endpoint";
+    public ResponseEntity<String> welcome(){
+        return ResponseEntity.ok("Welcome from secure endpoint");
     }
     
 }

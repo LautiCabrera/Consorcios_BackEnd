@@ -7,9 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDto {
-    
+public class MessageOkDto {
+
     @NotBlank
     String message;
-    
 }
