@@ -37,6 +37,9 @@ public class User implements UserDetails {
     private int phone;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean active = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

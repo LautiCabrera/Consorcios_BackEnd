@@ -37,8 +37,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
                 .authorizeHttpRequests(authRequest -> authRequest
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated())
+                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/users/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+                )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .accessDeniedHandler(customAccessDeniedHandler))

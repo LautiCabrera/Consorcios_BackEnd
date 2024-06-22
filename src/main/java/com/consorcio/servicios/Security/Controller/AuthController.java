@@ -22,12 +22,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/user/register")
-    public ResponseEntity<AuthResponseDto> userRegister(@RequestBody RegisterRequestDto request) {
-        AuthResponseDto response = authService.register(request, Role.ROLE_USER);
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping(value = "/admin/register")
     public ResponseEntity<AuthResponseDto> adminRegister(@RequestBody RegisterRequestDto request) {
         AuthResponseDto response = authService.register(request, Role.ROLE_ADMIN);
