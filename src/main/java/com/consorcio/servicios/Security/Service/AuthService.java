@@ -1,13 +1,17 @@
 package com.consorcio.servicios.Security.Service;
 
 import com.consorcio.servicios.Entity.User;
+import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Repository.UserRepository;
 import com.consorcio.servicios.Security.Dto.AuthResponseDto;
 import com.consorcio.servicios.Security.Dto.LoginRequestDto;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +40,14 @@ public class AuthService {
                 return new AuthResponseDto(token);
         }
 
-        public AuthResponseDto register(@Valid RegisterRequestDto request, Role role) {
+        public void register(@Valid RegisterRequestDto request, Role role) {
+            
+                Optional<User> existingUser = userRepository.findByUsername(request.getUsername());
+                
+                if (existingUser.isPresent()) {
+                    throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+                }
+            
                 User user = User.builder()
                                 .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword()))
@@ -45,12 +56,18 @@ public class AuthService {
                                 .phone(request.getPhone())
                                 .dni(request.getDni())
                                 .role(role)
+                                .status(UserStatus.ACTIVE)
                                 .build();
                 userRepository.save(user);
+                
+                try {
+                    userRepository.save(user);
+                } catch (DataIntegrityViolationException e) {
+                    throw new IllegalArgumentException("Error de integridad de datos: " + e.getMessage(), e);
+                } catch (AccessDeniedException e) {
+                    throw new AccessDeniedException("Access denied: " + e.getMessage(), e);
+                }
 
-                return AuthResponseDto.builder()
-                                .token(jwtService.getToken(user))
-                                .build();
         }
 
 }

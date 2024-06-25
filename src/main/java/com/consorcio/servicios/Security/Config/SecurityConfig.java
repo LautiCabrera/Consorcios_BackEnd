@@ -38,12 +38,13 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests(authRequest -> authRequest
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/super-auth/**").hasRole("SUPERADMIN")
                     .requestMatchers("/users/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .accessDeniedHandler(customAccessDeniedHandler))
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
+                    .accessDeniedHandler(customAccessDeniedHandler))
                 .sessionManagement(sessionManager -> sessionManager
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)

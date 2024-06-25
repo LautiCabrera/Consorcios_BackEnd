@@ -7,6 +7,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -46,6 +47,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageErrorDto> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageErrorDto("Illegal argument.", ex.getMessage()));
     }
+    
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<MessageErrorDto> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageErrorDto("Illegal state.", ex.getMessage()));
+    }
 
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<MessageErrorDto> handleSecurityException(SecurityException ex) {
@@ -65,6 +71,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageErrorDto> handleOtherExceptions(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageErrorDto("Internal server error.", ex.getMessage()));
+    }
+    
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<MessageErrorDto> handleNoSuchElementExceptions(NoSuchElementException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageErrorDto("Object empty.", ex.getMessage()));
     }
 
 }

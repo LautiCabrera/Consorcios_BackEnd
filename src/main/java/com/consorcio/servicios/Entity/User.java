@@ -1,5 +1,6 @@
 package com.consorcio.servicios.Entity;
 
+import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -37,9 +38,8 @@ public class User implements UserDetails {
     private int phone;
     @Enumerated(EnumType.STRING)
     Role role;
-    @Builder.Default
-    @Column(nullable = false)
-    private boolean active = true;
+    @Enumerated(EnumType.STRING)
+    UserStatus status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

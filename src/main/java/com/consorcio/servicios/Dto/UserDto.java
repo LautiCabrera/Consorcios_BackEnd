@@ -1,7 +1,7 @@
 package com.consorcio.servicios.Dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.consorcio.servicios.Enums.UserStatus;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
@@ -20,5 +20,7 @@ public class UserDto {
     int dni;
     @NotNull
     int phone;
+    @NotNull
+    UserStatus status;
     
 }

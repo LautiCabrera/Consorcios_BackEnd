@@ -4,7 +4,6 @@ import com.consorcio.servicios.Security.Service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.consorcio.servicios.Security.Dto.*;
-import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.RecoverPassService;
 import org.springframework.http.ResponseEntity;
 
@@ -16,15 +15,9 @@ public class AuthController {
     private final AuthService authService;
     private final RecoverPassService recoverPassService;
     
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
         AuthResponseDto response = authService.login(request);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(value = "/admin/register")
-    public ResponseEntity<AuthResponseDto> adminRegister(@RequestBody RegisterRequestDto request) {
-        AuthResponseDto response = authService.register(request, Role.ROLE_ADMIN);
         return ResponseEntity.ok(response);
     }
 
