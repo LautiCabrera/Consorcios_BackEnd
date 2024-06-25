@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private int dni;
     @Column(nullable = false)
-    private int phone;
+    private long phone;
     @Enumerated(EnumType.STRING)
     Role role;
     @Enumerated(EnumType.STRING)

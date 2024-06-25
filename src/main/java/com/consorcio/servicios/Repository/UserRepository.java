@@ -14,15 +14,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUsername(String username);
 
-    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
+    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.id_user, u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
            "FROM User u")
     List<UserDto> findAllUsers();
     
-    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
+    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.id_user, u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
            "FROM User u WHERE u.firstname LIKE %:name%")
     List<UserDto> findActiveUserByName(@Param ("name") String name);
     
-    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
+    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.id_user, u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) " +
            "FROM User u WHERE u.dni = :dni")
     List<UserDto> findActiveUserByDni(@Param ("dni") int dni);
     

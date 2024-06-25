@@ -11,6 +11,8 @@ import lombok.*;
 public class UserDto {
     
     @NotBlank
+    int id_user;
+    @NotBlank
     String username;
     @NotBlank
     String lastname;
@@ -19,7 +21,7 @@ public class UserDto {
     @NotNull
     int dni;
     @NotNull
-    int phone;
+    long phone;
     @NotNull
     UserStatus status;
     
