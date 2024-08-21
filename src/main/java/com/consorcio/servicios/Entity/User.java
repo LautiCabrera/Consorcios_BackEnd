@@ -22,24 +22,37 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private int id_user;
-    @Column(nullable = false)
-    private String username;
-    @Column(nullable = false)
-    private String firstname;
-    @Column(nullable = false)
-    private String lastname;
-    @Column(nullable = false)
-    private String password;
-    private String resetToken;
-    private LocalDateTime tokenExpiration;
+
     @Column(nullable = false)
     private int dni;
+
     @Column(nullable = false)
-    private long phone;
+    private String firstname;
+
+    @Column(nullable = false)
+    private String lastname;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     Role role;
+
+    @Column(nullable = false)
+    private String username;
+
     @Enumerated(EnumType.STRING)
     UserStatus status;
+
+    private String resetToken;
+
+    private LocalDateTime tokenExpiration;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Residence> residences;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

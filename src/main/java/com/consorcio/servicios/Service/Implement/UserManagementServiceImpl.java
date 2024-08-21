@@ -17,15 +17,15 @@ import org.springframework.transaction.TransactionSystemException;
 
 @Service
 public class UserManagementServiceImpl implements UserManagementService {
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     // El registro del usuario se encuentra en AuthService
 
     @Override
     public User updateUser(int userId, UserDto userDto) {
-        
+
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (!userOptional.isPresent()) {
@@ -35,7 +35,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         User user = userOptional.get();
 
         if (userDto.getUsername() == null || userDto.getFirstname() == null || userDto.getLastname() == null ||
-            userDto.getDni() <= 0 || userDto.getPhone() <= 0) {
+                userDto.getDni() <= 0 || userDto.getPhone() == null) {
             throw new IllegalArgumentException("Datos inválidos para actualizar usuario");
         }
 
@@ -56,17 +56,17 @@ public class UserManagementServiceImpl implements UserManagementService {
         } catch (TransactionSystemException e) {
             throw new IllegalStateException("Error de sistema de transacciones: " + e.getMessage(), e);
         }
-        
+
     }
-    
+
     @Override
     public void changeUserStatus(int userId, UserStatus status) {
         Optional<User> userOptional = userRepository.findById(userId);
-        
+
         if (!userOptional.isPresent()) {
             throw new NoSuchElementException("Usuario no encontrado");
-        } 
-        
+        }
+
         User user = userOptional.get();
         user.setStatus(status);
         userRepository.save(user);
@@ -74,38 +74,14 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        
+
         List<UserDto> users = userRepository.findAllUsers();
 
-         if (users.isEmpty()) {
+        if (users.isEmpty()) {
             throw new NoSuchElementException("Usuarios activos no encontrados");
         }
-         
+
         return users;
     }
 
-    @Override
-    public List<UserDto> searchActiveUserByName(String name) {
-        
-        List<UserDto> users = userRepository.findActiveUserByName(name);
-        
-         if (users.isEmpty()) {
-            throw new NoSuchElementException("Usuario/s no encontrados");
-        }
-        
-        return users ;
-    }
-
-    @Override
-    public List<UserDto> searchActiveUserByDni(int dni) {
-
-        List<UserDto> users = userRepository.findActiveUserByDni(dni);
-        
-        if (users.isEmpty()) {
-            throw new NoSuchElementException("Usuario no encontrado");
-        }
-        
-        return users;
-    }
-    
 }

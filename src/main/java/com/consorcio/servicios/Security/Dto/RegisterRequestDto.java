@@ -21,6 +21,6 @@ public class RegisterRequestDto {
     @NotNull
     int dni;
     @NotNull
-    long phone;
+    String phone;
 
 }

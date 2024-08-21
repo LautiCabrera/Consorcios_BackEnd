@@ -15,7 +15,6 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -37,18 +36,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authRequest -> authRequest
-                    .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/super-auth/**").hasRole("SUPERADMIN")
-                    .requestMatchers("/users/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
-                )
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/super-auth/**").hasRole("SUPERADMIN")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                    .authenticationEntryPoint(customAuthenticationEntryPoint)
-                    .accessDeniedHandler(customAccessDeniedHandler))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler))
                 .sessionManagement(sessionManager -> sessionManager
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -59,14 +57,13 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(corsAllowedOrigins));
         configuration.setAllowedMethods(Arrays.asList(
-            HttpMethod.GET.name(),
-            HttpMethod.POST.name(),
-            HttpMethod.PATCH.name(),
-            HttpMethod.PUT.name(),
-            HttpMethod.DELETE.name(),
-            HttpMethod.OPTIONS.name(),
-            HttpMethod.HEAD.name()
-        ));
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PATCH.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name(),
+                HttpMethod.OPTIONS.name(),
+                HttpMethod.HEAD.name()));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setExposedHeaders(Arrays.asList("X-Get-Header"));

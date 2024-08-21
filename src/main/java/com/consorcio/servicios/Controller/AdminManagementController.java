@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class AdminManagementController {
-    
+
     @Autowired
     private UserManagementService userManagementService;
     private final AuthService authService;
-    
+
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> activeUsers = userManagementService.getAllUsers();
         return ResponseEntity.ok(activeUsers);
     }
-    
+
     @PostMapping("/register")
     public ResponseEntity<MessageOkDto> userRegister(@RequestBody RegisterRequestDto request) {
         authService.register(request, Role.ROLE_USER);
@@ -41,25 +41,12 @@ public class AdminManagementController {
     }
 
     @PutMapping("/toggle-activation")
-    public ResponseEntity<MessageOkDto> toggleActivation(@RequestParam("id") int id, @RequestParam("status") UserStatus status) {
+    public ResponseEntity<MessageOkDto> toggleActivation(@RequestParam("id") int id,
+            @RequestParam("status") UserStatus status) {
         userManagementService.changeUserStatus(id, status);
-        String message = (status == UserStatus.ACTIVE) ? "Usuario activado exitosamente" : "Usuario desactivado exitosamente";
+        String message = (status == UserStatus.ACTIVE) ? "Usuario activado exitosamente"
+                : "Usuario desactivado exitosamente";
         return ResponseEntity.ok(new MessageOkDto(message));
     }
-    
-    @GetMapping("/search")
-    public ResponseEntity<List<UserDto>> searchUsers(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "dni", required = false) Integer dni) {
-        List<UserDto> activeUsers;
 
-        if (name != null) {
-            activeUsers = userManagementService.searchActiveUserByName(name);
-        } else if (dni != null) {
-            activeUsers = userManagementService.searchActiveUserByDni(dni);
-        } else {
-            throw new IllegalArgumentException("Debe proporcionar un parámetro de búsqueda: name o dni");
-        }
-        
-        return ResponseEntity.ok(activeUsers);
-    }
-    
 }

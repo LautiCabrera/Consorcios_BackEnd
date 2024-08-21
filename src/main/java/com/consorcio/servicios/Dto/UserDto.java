@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    
+
     @NotBlank
     int id_user;
     @NotBlank
@@ -21,8 +21,8 @@ public class UserDto {
     @NotNull
     int dni;
     @NotNull
-    long phone;
+    String phone;
     @NotNull
     UserStatus status;
-    
+
 }
