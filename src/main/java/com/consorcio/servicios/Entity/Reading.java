@@ -1,5 +1,6 @@
 package com.consorcio.servicios.Entity;
 
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,26 +13,24 @@ import lombok.*;
 public class Reading {
 
     @Id
-    @GeneratedValue
-    private int id_reading;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id_reading;
 
     @Column(nullable = false)
     private Double reading;
 
     @Column(nullable = false)
-    private Double date_reading;
-
-    @Column(nullable = false)
-    private String period;
+    private LocalDateTime date_reading;
 
     @Column(nullable = false)
     private int year;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_modality", nullable = false, unique = true)
-    private Modality modality;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_period", nullable = false)
+    private Period period;
 
-    @OneToOne(mappedBy = "reading", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_meter", nullable = false)
     private Meter meter;
 
 }

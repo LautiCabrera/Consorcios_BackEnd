@@ -1,6 +1,5 @@
 package com.consorcio.servicios.Entity;
 
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,13 +12,14 @@ import lombok.*;
 public class Province {
 
     @Id
-    @GeneratedValue
-    private int id_province;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id_province;
 
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "province", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Location> location;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_country", nullable = false)
+    private Country country;
 
 }

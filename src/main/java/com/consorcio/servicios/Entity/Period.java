@@ -4,22 +4,22 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "location")
-public class Location {
+@Builder
+@Entity
+@Table(name = "period")
+public class Period {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_location;
+    private long id_period;
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "province_id", nullable = false)
-    private Province province;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_modality", nullable = false)
+    private Modality modality;
 
 }

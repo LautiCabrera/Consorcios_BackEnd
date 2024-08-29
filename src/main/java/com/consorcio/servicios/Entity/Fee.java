@@ -13,8 +13,8 @@ import lombok.*;
 public class Fee {
 
     @Id
-    @GeneratedValue
-    private int id_fee;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id_fee;
 
     @Column(nullable = false)
     private String name;

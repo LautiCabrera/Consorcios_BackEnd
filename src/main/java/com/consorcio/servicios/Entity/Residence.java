@@ -4,28 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
+@Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
 @Table(name = "residence")
 public class Residence {
 
     @Id
-    @GeneratedValue
-    private int id_residence;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false)
-    private User user;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_meter", nullable = false, unique = true)
-    private Meter meter;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_location", nullable = false, unique = true)
-    private Location location;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id_residence;
 
     @Column(nullable = false)
     private String street;
@@ -41,5 +29,17 @@ public class Residence {
 
     @Column(nullable = false)
     private float longitude;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_meter", nullable = true)
+    private Meter meter;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_location", nullable = false)
+    private Location location;
 
 }

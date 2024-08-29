@@ -13,5 +13,4 @@ public interface ReadingService {
 
     public Reading updateReading(Reading reading);
 
-    public void deleteReading(int id);
 }

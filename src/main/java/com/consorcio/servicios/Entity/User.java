@@ -4,8 +4,7 @@ import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,8 +19,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private int id_user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id_user;
 
     @Column(nullable = false)
     private int dni;
@@ -52,7 +51,8 @@ public class User implements UserDetails {
     private LocalDateTime tokenExpiration;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Residence> residences;
+    @Builder.Default
+    private List<Residence> residences = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

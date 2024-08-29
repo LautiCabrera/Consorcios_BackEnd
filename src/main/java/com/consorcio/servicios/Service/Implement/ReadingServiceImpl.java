@@ -3,9 +3,11 @@ package com.consorcio.servicios.Service.Implement;
 import com.consorcio.servicios.Entity.Reading;
 import com.consorcio.servicios.Repository.ReadingRepository;
 import com.consorcio.servicios.Service.ReadingService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
+@Service
 public class ReadingServiceImpl implements ReadingService {
 
     @Autowired
@@ -29,11 +31,6 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     public Reading updateReading(Reading reading) {
         return readingRepository.save(reading);
-    }
-
-    @Override
-    public void deleteReading(int id) {
-        readingRepository.deleteById(id);
     }
 
 }

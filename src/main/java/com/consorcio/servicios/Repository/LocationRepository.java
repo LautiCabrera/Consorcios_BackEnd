@@ -1,10 +1,10 @@
 package com.consorcio.servicios.Repository;
 
-import com.consorcio.servicios.Entity.Reading;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import com.consorcio.servicios.Entity.Location;
 
 @Repository
-public interface ReadingRepository extends JpaRepository<Reading, Integer> {
+public interface LocationRepository extends JpaRepository<Location, Long> {
 
 }
