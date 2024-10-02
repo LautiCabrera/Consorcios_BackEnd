@@ -19,18 +19,18 @@ public class ReadingServiceImpl implements ReadingService {
     }
 
     @Override
-    public Reading getReadingById(int id) {
-        return readingRepository.findById(id).orElse(null);
+    public void createReading(Reading reading) {
+        readingRepository.save(reading);
     }
 
     @Override
-    public Reading createReading(Reading reading) {
-        return readingRepository.save(reading);
-    }
+    public void updateReading(Long idReading, Reading readingDto) {
 
-    @Override
-    public Reading updateReading(Reading reading) {
-        return readingRepository.save(reading);
+        Reading reading = readingRepository.findById(idReading)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado para actualización"));
+        reading.setReading(readingDto.getReading());
+
+        readingRepository.save(reading);
     }
 
 }

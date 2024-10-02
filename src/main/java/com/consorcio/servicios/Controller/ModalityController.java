@@ -1,47 +1,74 @@
 package com.consorcio.servicios.Controller;
 
 import com.consorcio.servicios.Entity.Modality;
+import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Service.ModalityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/modalities")
+@RequestMapping("/api/v1/modalities")
 public class ModalityController {
 
     @Autowired
     private ModalityService modalityService;
 
     @GetMapping
-    public ResponseEntity<List<Modality>> getAllModalities() {
-        return new ResponseEntity<>(modalityService.getAllModalities(), HttpStatus.OK);
+    public WebApiResponse<List<Modality>> getAllModalities() {
+        try {
+            List<Modality> modalities = modalityService.getAllModalities();
+            return WebApiResponse.success(modalities, "Modalidades obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener modalidades", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Modality> getModalityById(@PathVariable int id) {
-        Modality modality = modalityService.getModalityById(id);
-        return modality != null ? ResponseEntity.ok(modality) : ResponseEntity.notFound().build();
+    public WebApiResponse<Modality> getModalityById(@PathVariable Long id) {
+        try {
+            return WebApiResponse.success(modalityService.getModalityById(id), "Modalidad obtenida exitosamente",
+                    HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Modality> createModality(@RequestBody Modality modality) {
-        return new ResponseEntity<>(modalityService.createModality(modality), HttpStatus.CREATED);
+    public WebApiResponse<Void> createModality(@RequestBody Modality modality) {
+        try {
+            modalityService.createModality(modality);
+            return WebApiResponse.success(null, "Modalidad creada exitosamente", HttpStatus.CREATED.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al crear modalidad", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Modality> updateModality(@PathVariable int id, @RequestBody Modality modality) {
-        modality.setId_modality(id);
-        Modality updatedModality = modalityService.updateModality(modality);
-        return updatedModality != null ? ResponseEntity.ok(updatedModality) : ResponseEntity.notFound().build();
+    public WebApiResponse<Void> updateModality(@PathVariable Long id, @RequestBody Modality modality) {
+        try {
+            modality.setIdModality(id);
+            modalityService.updateModality(modality);
+            return WebApiResponse.success(null, "Modalidad actualizada exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al actualizar modalidad", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteModality(@PathVariable int id) {
-        modalityService.deleteModality(id);
-        return ResponseEntity.noContent().build();
+    public WebApiResponse<Void> deleteModality(@PathVariable Long id) {
+        try {
+            modalityService.deleteModality(id);
+            return WebApiResponse.success(null, "Modalidad eliminada exitosamente", HttpStatus.NO_CONTENT.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al eliminar modalidad", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
     }
 
 }

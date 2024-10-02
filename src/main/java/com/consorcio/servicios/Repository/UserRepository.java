@@ -9,12 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
-    
-    
-    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.id_user, u.username, u.lastname, u.firstname, u.dni, u.phone, u.status) "
+
+    @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.idUser, u.username, u.lastName, u.firstName, u.dni, u.phone, u.status) "
             + "FROM User u")
     List<UserDto> findAllUsers();
 

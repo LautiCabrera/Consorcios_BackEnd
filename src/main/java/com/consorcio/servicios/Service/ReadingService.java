@@ -7,10 +7,8 @@ public interface ReadingService {
 
     public List<Reading> getAllReadings();
 
-    public Reading getReadingById(int id);
+    public void createReading(Reading reading);
 
-    public Reading createReading(Reading reading);
-
-    public Reading updateReading(Reading reading);
+    public void updateReading(Long idReading, Reading reading);
 
 }

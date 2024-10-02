@@ -14,23 +14,15 @@ public class Meter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_meter;
+    private Long idMeter;
 
     @Column(nullable = false, unique = true)
-    private Long number_meter;
+    private Long numberMeter;
 
     @Column(nullable = false)
-    private Date date_connection;
+    private Date dateConnection;
 
-    @OneToOne(mappedBy = "meter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Residence residence;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_fee", nullable = false)
-    private Fee fee;
-
-    @OneToMany(mappedBy = "meter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Reading> readings = new ArrayList<>();
+    @Column(nullable = false)
+    private Long idFee;
 
 }

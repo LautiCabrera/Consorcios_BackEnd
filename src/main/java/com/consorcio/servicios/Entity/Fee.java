@@ -1,6 +1,5 @@
 package com.consorcio.servicios.Entity;
 
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +13,7 @@ public class Fee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_fee;
+    private Long idFee;
 
     @Column(nullable = false)
     private String name;
@@ -23,9 +22,6 @@ public class Fee {
     private int price;
 
     @Column(nullable = false)
-    private int consumption_max;
-
-    @OneToMany(mappedBy = "fee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Meter> meters;
+    private int consumptionMax;
 
 }

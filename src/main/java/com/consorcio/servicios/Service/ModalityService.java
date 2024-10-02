@@ -7,12 +7,12 @@ public interface ModalityService {
 
     public List<Modality> getAllModalities();
 
-    public Modality getModalityById(int id);
+    public Modality getModalityById(Long id);
 
     public Modality createModality(Modality modality);
 
     public Modality updateModality(Modality modality);
 
-    public void deleteModality(int id);
+    public void deleteModality(Long id);
 
 }

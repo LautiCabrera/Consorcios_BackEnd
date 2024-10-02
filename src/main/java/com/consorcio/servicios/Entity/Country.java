@@ -13,9 +13,6 @@ public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "id_country", unique = true)
     private Long idCountry;
 
     private String name;

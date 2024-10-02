@@ -13,13 +13,12 @@ public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_province;
+    private Long idProvince;
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "id_country", nullable = false)
-    private Country country;
+    @Column(nullable = false)
+    private Long idCountry;
 
 }

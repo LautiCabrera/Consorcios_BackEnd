@@ -14,23 +14,18 @@ public class Reading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_reading;
+    private Long idReading;
 
     @Column(nullable = false)
     private Double reading;
 
     @Column(nullable = false)
-    private LocalDateTime date_reading;
+    private LocalDateTime dateReading;
 
     @Column(nullable = false)
-    private int year;
+    private Long idPeriod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_period", nullable = false)
-    private Period period;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_meter", nullable = false)
-    private Meter meter;
+    @Column(nullable = false)
+    private Long idMeter;
 
 }

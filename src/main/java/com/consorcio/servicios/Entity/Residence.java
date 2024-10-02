@@ -13,16 +13,16 @@ public class Residence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_residence;
+    private Long idResidence;
 
     @Column(nullable = false)
     private String street;
 
     @Column(nullable = false)
-    private long number;
+    private Long number;
 
     @Column(nullable = false)
-    private int postal_code;
+    private int postalCode;
 
     @Column(nullable = false)
     private float latitude;
@@ -30,16 +30,13 @@ public class Residence {
     @Column(nullable = false)
     private float longitude;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private Long idUser;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_meter", nullable = true)
-    private Meter meter;
+    @Column(nullable = false)
+    private Long idMeter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_location", nullable = false)
-    private Location location;
+    @Column(nullable = false)
+    private Long idLocation;
 
 }

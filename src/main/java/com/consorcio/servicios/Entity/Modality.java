@@ -1,6 +1,5 @@
 package com.consorcio.servicios.Entity;
 
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,13 +13,10 @@ public class Modality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_modality;
+    private Long idModality;
 
     @Column(nullable = false)
     private String name;
-
-    @OneToMany(mappedBy = "modality", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Period> periods;
 
     @Column(nullable = false)
     private boolean active;

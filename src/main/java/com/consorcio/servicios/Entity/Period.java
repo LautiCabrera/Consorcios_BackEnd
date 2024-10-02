@@ -13,13 +13,12 @@ public class Period {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_period;
+    private Long idPeriod;
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_modality", nullable = false)
-    private Modality modality;
+    @Column(nullable = false)
+    private Long idModality;
 
 }

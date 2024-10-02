@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface UserManagementService {
 
-    public User updateUser(int userId, UserDto userDto);
+    public User updateUser(Long idUser, UserDto userDto);
 
-    void changeUserStatus(int userId, UserStatus status);
+    void changeUserStatus(Long idUser, UserStatus status);
 
     public List<UserDto> getAllUsers();
 

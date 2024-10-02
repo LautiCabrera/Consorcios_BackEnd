@@ -28,9 +28,7 @@ public class JwtService {
         return Jwts
                 .builder()
                 .claims(extraClaims)
-                .claim("userId", user.getId_user())
-                .claim(("firstName"), user.getFirstname())
-                .claim("lastName", user.getLastname())
+                .claim("userId", user.getIdUser())
                 .claim("role", user.getRole())
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))

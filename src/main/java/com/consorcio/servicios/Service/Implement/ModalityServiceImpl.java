@@ -19,7 +19,7 @@ public class ModalityServiceImpl implements ModalityService {
     }
 
     @Override
-    public Modality getModalityById(int id) {
+    public Modality getModalityById(Long id) {
         return modalityRepository.findById(id).orElse(null);
     }
 
@@ -35,7 +35,7 @@ public class ModalityServiceImpl implements ModalityService {
     }
 
     @Override
-    public void deleteModality(int id) {
+    public void deleteModality(Long id) {
         Modality modality = getModalityById(id);
         if (modality != null) {
             modality.setActive(false);

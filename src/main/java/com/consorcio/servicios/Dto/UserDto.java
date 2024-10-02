@@ -11,13 +11,13 @@ import lombok.*;
 public class UserDto {
 
     @NotBlank
-    int id_user;
+    Long idUser;
     @NotBlank
     String username;
     @NotBlank
-    String lastname;
+    String lastName;
     @NotBlank
-    String firstname;
+    String firstName;
     @NotNull
     int dni;
     @NotNull

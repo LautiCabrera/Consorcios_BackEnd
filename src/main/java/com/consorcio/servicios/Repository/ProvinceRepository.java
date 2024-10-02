@@ -8,7 +8,7 @@ import com.consorcio.servicios.Entity.Province;
 @Repository
 public interface ProvinceRepository extends JpaRepository<Province, Long> {
 
-    List<Province> findByCountryIdCountry(Long idCountry);
+    List<Province> findByIdCountry(Long idCountry);
 
     Province findByName(String name);
 

@@ -24,7 +24,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     // El registro del usuario se encuentra en AuthService
 
     @Override
-    public User updateUser(int userId, UserDto userDto) {
+    public User updateUser(Long userId, UserDto userDto) {
 
         Optional<User> userOptional = userRepository.findById(userId);
 
@@ -34,14 +34,14 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         User user = userOptional.get();
 
-        if (userDto.getUsername() == null || userDto.getFirstname() == null || userDto.getLastname() == null ||
+        if (userDto.getUsername() == null || userDto.getFirstName() == null || userDto.getLastName() == null ||
                 userDto.getDni() <= 0 || userDto.getPhone() == null) {
             throw new IllegalArgumentException("Datos inválidos para actualizar usuario");
         }
 
         user.setUsername(userDto.getUsername());
-        user.setFirstname(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
         user.setDni(userDto.getDni());
         user.setPhone(userDto.getPhone());
 
@@ -60,8 +60,8 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public void changeUserStatus(int userId, UserStatus status) {
-        Optional<User> userOptional = userRepository.findById(userId);
+    public void changeUserStatus(Long idUser, UserStatus status) {
+        Optional<User> userOptional = userRepository.findById(idUser);
 
         if (!userOptional.isPresent()) {
             throw new NoSuchElementException("Usuario no encontrado");
@@ -78,7 +78,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         List<UserDto> users = userRepository.findAllUsers();
 
         if (users.isEmpty()) {
-            throw new NoSuchElementException("Usuarios activos no encontrados");
+            throw new NoSuchElementException("Usuarios no encontrados");
         }
 
         return users;

@@ -23,51 +23,51 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 public class AuthService {
 
-        private final UserRepository userRepository;
-        private final JwtService jwtService;
-        private final PasswordEncoder passwordEncoder;
-        private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-        public AuthResponseDto login(LoginRequestDto request) {
+    public AuthResponseDto login(LoginRequestDto request) {
 
-                authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-                User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
-                String token = jwtService.getToken(user);
+        String token = jwtService.getToken(user);
 
-                return new AuthResponseDto(token);
+        return new AuthResponseDto(token);
+    }
+
+    public void register(@Valid RegisterRequestDto request, Role role) {
+
+        Optional<User> existingUser = userRepository.findByUsername(request.getUsername());
+
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("El nombre de usuario ya está en uso");
         }
 
-        public void register(@Valid RegisterRequestDto request, Role role) {
-            
-                Optional<User> existingUser = userRepository.findByUsername(request.getUsername());
-                
-                if (existingUser.isPresent()) {
-                    throw new IllegalArgumentException("El nombre de usuario ya está en uso");
-                }
-            
-                User user = User.builder()
-                                .username(request.getUsername())
-                                .password(passwordEncoder.encode(request.getPassword()))
-                                .firstname(request.getFirstname())
-                                .lastname(request.getLastname())
-                                .phone(request.getPhone())
-                                .dni(request.getDni())
-                                .role(role)
-                                .status(UserStatus.ACTIVE)
-                                .build();
-                userRepository.save(user);
-                
-                try {
-                    userRepository.save(user);
-                } catch (DataIntegrityViolationException e) {
-                    throw new IllegalArgumentException("Error de integridad de datos: " + e.getMessage(), e);
-                } catch (AccessDeniedException e) {
-                    throw new AccessDeniedException("Access denied: " + e.getMessage(), e);
-                }
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstname())
+                .lastName(request.getLastname())
+                .phone(request.getPhone())
+                .dni(request.getDni())
+                .role(role)
+                .status(UserStatus.ACTIVE)
+                .build();
+        userRepository.save(user);
 
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Error de integridad de datos: " + e.getMessage(), e);
+        } catch (AccessDeniedException e) {
+            throw new AccessDeniedException("Access denied: " + e.getMessage(), e);
         }
+
+    }
 
 }
