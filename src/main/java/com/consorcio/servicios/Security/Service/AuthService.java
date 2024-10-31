@@ -10,8 +10,6 @@ import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,16 +56,8 @@ public class AuthService {
                 .role(role)
                 .status(UserStatus.ACTIVE)
                 .build();
+
         userRepository.save(user);
-
-        try {
-            userRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("Error de integridad de datos: " + e.getMessage(), e);
-        } catch (AccessDeniedException e) {
-            throw new AccessDeniedException("Access denied: " + e.getMessage(), e);
-        }
-
     }
 
 }

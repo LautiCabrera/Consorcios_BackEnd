@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.consorcio.servicios.Security.Exception.CustomAccessDeniedHandler;
-import com.consorcio.servicios.Security.Exception.CustomAuthenticationEntryPoint;
 import com.consorcio.servicios.Security.Jwt.JwtAuthenticationFilter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +25,6 @@ public class SecurityConfig {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final AuthenticationProvider authProvider;
-        private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-        private final CustomAccessDeniedHandler customAccessDeniedHandler;
         @Value("${web.cors.allowed-origins}")
         private String corsAllowedOrigins;
 
@@ -43,15 +39,12 @@ public class SecurityConfig {
                                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                                 // permisos para funciones de operario
                                                 .requestMatchers("/api/v1/operator/**")
-                                                .hasAnyRole("OPERATOR", "OPERATOR_USER", "ADMIN")
+                                                .hasAnyRole("OPERATOR", "ADMIN")
                                                 // permisos para funciones de usuario
                                                 .requestMatchers("/api/v1/user/**")
-                                                .hasAnyRole("USER", "OPERATOR_USER", "ADMIN")
+                                                .hasAnyRole("USER", "ADMIN")
 
                                                 .anyRequest().authenticated())
-                                .exceptionHandling(exceptionHandling -> exceptionHandling
-                                                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                                                .accessDeniedHandler(customAccessDeniedHandler))
                                 .sessionManagement(sessionManager -> sessionManager
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authProvider)
@@ -66,11 +59,8 @@ public class SecurityConfig {
                 configuration.setAllowedMethods(Arrays.asList(
                                 HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
-                                HttpMethod.PATCH.name(),
                                 HttpMethod.PUT.name(),
-                                HttpMethod.DELETE.name(),
-                                HttpMethod.OPTIONS.name(),
-                                HttpMethod.HEAD.name()));
+                                HttpMethod.DELETE.name()));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
                 configuration.setExposedHeaders(Arrays.asList("X-Get-Header"));

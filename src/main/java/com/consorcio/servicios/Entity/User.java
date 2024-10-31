@@ -50,6 +50,18 @@ public class User implements UserDetails {
 
     private LocalDateTime tokenExpiration;
 
+    @Column(name = "id_user_update")
+    private Long idUserUpdate;
+
+    @Column(name = "id_user_register")
+    private Long idUserRegister;
+
+    @Column(name = "date_update")
+    private LocalDateTime dateUpdate;
+
+    @Column(name = "date_register")
+    private LocalDateTime datRegister;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));

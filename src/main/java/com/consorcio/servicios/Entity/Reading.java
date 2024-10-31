@@ -28,4 +28,16 @@ public class Reading {
     @Column(nullable = false)
     private Long idMeter;
 
+    @Column(name = "id_user_update")
+    private Long idUserUpdate;
+
+    @Column(name = "id_user_register")
+    private Long idUserRegister;
+
+    @Column(name = "date_update")
+    private LocalDateTime dateUpdate;
+
+    @Column(name = "date_register")
+    private LocalDateTime datRegister;
+
 }

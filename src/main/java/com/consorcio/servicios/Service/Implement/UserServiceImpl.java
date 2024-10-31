@@ -1,22 +1,21 @@
 package com.consorcio.servicios.Service.Implement;
 
 import com.consorcio.servicios.Dto.UserDto;
-import com.consorcio.servicios.Service.UserManagementService;
+import com.consorcio.servicios.Security.Config.Authenticated;
+import com.consorcio.servicios.Security.Config.CustomUserDetails;
+import com.consorcio.servicios.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.consorcio.servicios.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Enums.UserStatus;
-import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.transaction.TransactionSystemException;
 
 @Service
-public class UserManagementServiceImpl implements UserManagementService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,7 +23,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     // El registro del usuario se encuentra en AuthService
 
     @Override
-    public User updateUser(Long userId, UserDto userDto) {
+    public void updateUser(Long userId, UserDto userDto) {
 
         Optional<User> userOptional = userRepository.findById(userId);
 
@@ -32,31 +31,21 @@ public class UserManagementServiceImpl implements UserManagementService {
             throw new NoSuchElementException("Usuario no encontrado");
         }
 
-        User user = userOptional.get();
+        CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
 
-        if (userDto.getUsername() == null || userDto.getFirstName() == null || userDto.getLastName() == null ||
-                userDto.getDni() <= 0 || userDto.getPhone() == null) {
-            throw new IllegalArgumentException("Datos inválidos para actualizar usuario");
-        }
+        User user = userOptional.get();
 
         user.setUsername(userDto.getUsername());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setDni(userDto.getDni());
         user.setPhone(userDto.getPhone());
+        user.setDateUpdate(LocalDateTime.now());
 
-        try {
-            return userRepository.save(user);
-        } catch (ConstraintViolationException e) {
-            throw new IllegalArgumentException("Violación de restricciones: " + e.getMessage(), e);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("Violación de integridad de datos: " + e.getMessage(), e);
-        } catch (ObjectOptimisticLockingFailureException e) {
-            throw new IllegalStateException("Error de concurrencia optimista: " + e.getMessage(), e);
-        } catch (TransactionSystemException e) {
-            throw new IllegalStateException("Error de sistema de transacciones: " + e.getMessage(), e);
-        }
+        user.setIdUserRegister(currentUser.getUser().getIdUser());
+        user.setIdUserUpdate(currentUser.getUser().getIdUser());
 
+        userRepository.save(user);
     }
 
     @Override
@@ -67,8 +56,13 @@ public class UserManagementServiceImpl implements UserManagementService {
             throw new NoSuchElementException("Usuario no encontrado");
         }
 
+        CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
+
         User user = userOptional.get();
+
         user.setStatus(status);
+        user.setIdUserUpdate(currentUser.getUser().getIdUser());
+
         userRepository.save(user);
     }
 
