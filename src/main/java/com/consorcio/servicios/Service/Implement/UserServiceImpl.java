@@ -3,6 +3,7 @@ package com.consorcio.servicios.Service.Implement;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Security.Config.Authenticated;
 import com.consorcio.servicios.Security.Config.CustomUserDetails;
+import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.consorcio.servicios.Repository.UserRepository;
@@ -68,13 +69,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-
         List<UserDto> users = userRepository.findAllUsers();
+        return users;
+    }
 
-        if (users.isEmpty()) {
-            throw new NoSuchElementException("Usuarios no encontrados");
-        }
-
+    @Override
+    public List<UserDto> getUsersActives(Role role, UserStatus status) {
+        List<UserDto> users = userRepository.findActiveUsersWithRole(role, status);
         return users;
     }
 

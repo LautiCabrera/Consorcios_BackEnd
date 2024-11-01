@@ -25,7 +25,7 @@ public class ModalityServiceImpl implements ModalityService {
 
     @Override
     public Modality createModality(Modality modality) {
-        modality.setActive(true);
+        modality.setActive(false);
         return modalityRepository.save(modality);
     }
 

@@ -46,6 +46,17 @@ public class OperatorManagementController {
         }
     }
 
+    @GetMapping("/users-active")
+    public WebApiResponse<List<UserDto>> getUsersActives() {
+        try {
+            List<UserDto> users = userManagementService.getUsersActives(Role.ROLE_USER, UserStatus.ACTIVE);
+            return WebApiResponse.success(users, "Usuarios activos obtenidos exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener usuarios activos", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
     @PostMapping("/register-operator")
     public WebApiResponse<Void> operatorRegister(@RequestBody RegisterRequestDto request) {
         try {

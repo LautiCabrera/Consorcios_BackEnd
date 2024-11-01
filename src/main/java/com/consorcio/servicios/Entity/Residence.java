@@ -2,7 +2,6 @@ package com.consorcio.servicios.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -18,13 +17,13 @@ public class Residence {
     private Long idResidence;
 
     @Column(nullable = false)
+    private String district;
+
+    @Column(nullable = false)
     private String street;
 
     @Column(nullable = false)
     private Long number;
-
-    @Column(nullable = false)
-    private int postalCode;
 
     @Column(nullable = false)
     private float latitude;

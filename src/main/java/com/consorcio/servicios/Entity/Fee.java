@@ -2,7 +2,6 @@ package com.consorcio.servicios.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
