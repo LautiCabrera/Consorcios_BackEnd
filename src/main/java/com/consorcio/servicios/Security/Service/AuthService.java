@@ -3,6 +3,8 @@ package com.consorcio.servicios.Security.Service;
 import com.consorcio.servicios.Entity.User;
 import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Repository.UserRepository;
+import com.consorcio.servicios.Security.Config.Authenticated;
+import com.consorcio.servicios.Security.Config.CustomUserDetails;
 import com.consorcio.servicios.Security.Dto.AuthResponseDto;
 import com.consorcio.servicios.Security.Dto.LoginRequestDto;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
@@ -46,6 +48,8 @@ public class AuthService {
             throw new IllegalArgumentException("El nombre de usuario ya está en uso");
         }
 
+        CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -56,6 +60,9 @@ public class AuthService {
                 .role(role)
                 .status(UserStatus.ACTIVE)
                 .build();
+
+        user.setIdUserRegister(currentUser.getUser().getIdUser());
+        user.setIdUserUpdate(currentUser.getUser().getIdUser());
 
         userRepository.save(user);
     }

@@ -27,4 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("status") UserStatus status
     );
 
+    @Query("SELECT u.role FROM User u WHERE u.username = :username")
+    Optional<Role> findRoleForUser(String username);
+
 }

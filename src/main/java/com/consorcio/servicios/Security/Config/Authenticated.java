@@ -2,6 +2,7 @@ package com.consorcio.servicios.Security.Config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.consorcio.servicios.Security.Config.CustomUserDetails;
 
 public class Authenticated {
 

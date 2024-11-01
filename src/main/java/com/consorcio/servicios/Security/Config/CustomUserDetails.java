@@ -1,13 +1,13 @@
 package com.consorcio.servicios.Security.Config;
 
 import com.consorcio.servicios.Entity.User;
+import com.consorcio.servicios.Security.Enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Data;
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 public class CustomUserDetails implements UserDetails {
@@ -15,11 +15,10 @@ public class CustomUserDetails implements UserDetails {
     private User user;
     private Set<GrantedAuthority> authorities;
 
-    public CustomUserDetails(User user, Set<String> permissions) {
+    public CustomUserDetails(User user, Role role) {
         this.user = user;
-        this.authorities = permissions.stream()
-                .map(permission -> new SimpleGrantedAuthority(permission))
-                .collect(Collectors.toSet());
+        // Convierte el role enum a una autoridad y lo agrega al conjunto
+        this.authorities = Set.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

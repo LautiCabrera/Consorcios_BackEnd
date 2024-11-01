@@ -9,9 +9,9 @@ public interface ModalityService {
 
     public Modality getModalityById(Long id);
 
-    public Modality createModality(Modality modality);
+    public void createModality(Modality modality);
 
-    public Modality updateModality(Modality modality);
+    public void updateModality(Modality modality);
 
     public void deleteModality(Long id);
 

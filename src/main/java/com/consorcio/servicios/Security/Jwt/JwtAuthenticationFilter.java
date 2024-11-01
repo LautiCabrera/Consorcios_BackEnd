@@ -2,6 +2,7 @@ package com.consorcio.servicios.Security.Jwt;
 
 import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Enums.Role;
+import com.consorcio.servicios.Security.Service.CustomUserDetailsService;
 import com.consorcio.servicios.Security.Service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -18,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @SuppressWarnings("null")
     @Override
@@ -49,6 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtService.getUsernameFromToken(token);
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Carga los detalles del usuario desde el servicio de UserDetails
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                     if (jwtService.isTokenValid(token, userDetails)) {

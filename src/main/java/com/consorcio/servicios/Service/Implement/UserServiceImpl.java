@@ -42,8 +42,6 @@ public class UserServiceImpl implements UserService {
         user.setDni(userDto.getDni());
         user.setPhone(userDto.getPhone());
         user.setDateUpdate(LocalDateTime.now());
-
-        user.setIdUserRegister(currentUser.getUser().getIdUser());
         user.setIdUserUpdate(currentUser.getUser().getIdUser());
 
         userRepository.save(user);

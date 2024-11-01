@@ -24,14 +24,14 @@ public class ModalityServiceImpl implements ModalityService {
     }
 
     @Override
-    public Modality createModality(Modality modality) {
+    public void createModality(Modality modality) {
         modality.setActive(false);
-        return modalityRepository.save(modality);
+        modalityRepository.save(modality);
     }
 
     @Override
-    public Modality updateModality(Modality modality) {
-        return modalityRepository.save(modality);
+    public void updateModality(Modality modality) {
+        modalityRepository.save(modality);
     }
 
     @Override

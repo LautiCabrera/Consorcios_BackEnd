@@ -1,6 +1,7 @@
 package com.consorcio.servicios.Controller;
 
 import com.consorcio.servicios.Dto.Create.CreateReadingDto;
+import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
 import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Entity.Modality;
@@ -11,6 +12,7 @@ import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
 import com.consorcio.servicios.Service.ModalityService;
+import com.consorcio.servicios.Service.PeriodService;
 import com.consorcio.servicios.Service.ReadingService;
 import com.consorcio.servicios.Service.UserService;
 import java.util.List;
@@ -32,6 +34,8 @@ public class OperatorManagementController {
     private ReadingService readingService;
     @Autowired
     private ModalityService modalityService;
+    @Autowired
+    private PeriodService periodService;
 
     // Gestion de usuarios
 
@@ -126,7 +130,7 @@ public class OperatorManagementController {
         }
     }
 
-    @PutMapping("/reading/{idReading}")
+    @PutMapping("/update-reading/{idReading}")
     public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody UpdateReadingDto reading) {
         try {
             readingService.updateReading(idReading, reading);
@@ -150,10 +154,10 @@ public class OperatorManagementController {
         }
     }
 
-    @GetMapping("/modality/{id}")
-    public WebApiResponse<Modality> getModalityById(@PathVariable Long id) {
+    @GetMapping("/modality/{idModality}")
+    public WebApiResponse<Modality> getModalityById(@PathVariable Long idModality) {
         try {
-            return WebApiResponse.success(modalityService.getModalityById(id), "Modalidad obtenida exitosamente",
+            return WebApiResponse.success(modalityService.getModalityById(idModality), "Modalidad obtenida exitosamente",
                     HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
@@ -197,7 +201,17 @@ public class OperatorManagementController {
 
     // Gestion de Periodos
 
-
+    @GetMapping("/period/{idModality}")
+    public WebApiResponse<List<ReadPeriodDto>> getPeriodByIdModality(@PathVariable Long idModality) {
+        try {
+            List<ReadPeriodDto> periods = periodService.getPeriodByModalityId(idModality);
+            return WebApiResponse.success(periods, "Modalidad obtenida exitosamente",
+                    HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
 
     // Gestion de Medidores
 
