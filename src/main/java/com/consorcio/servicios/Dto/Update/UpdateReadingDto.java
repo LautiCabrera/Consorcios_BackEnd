@@ -14,7 +14,4 @@ public class UpdateReadingDto {
     @NotBlank
     private Long idPeriod;
 
-    @NotBlank
-    private Long idMeter;
-
 }

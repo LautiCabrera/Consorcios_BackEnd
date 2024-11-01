@@ -14,7 +14,4 @@ public class CreateReadingDto {
     @NotBlank
     private Long idPeriod;
 
-    @NotBlank
-    private Long idMeter;
-
 }

@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<UserDto> users = userRepository.findAllUsers();
-        return users;
+        return users.isEmpty() ? users : users.subList(1, users.size());
     }
 
     @Override

@@ -115,10 +115,10 @@ public class OperatorManagementController {
         }
     }
 
-    @PostMapping("/register-reading")
-    public WebApiResponse<Void> createReading(@RequestBody CreateReadingDto reading) {
+    @PostMapping("/register-reading/{idUser}")
+    public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody CreateReadingDto reading) {
         try {
-            readingService.createReading(reading);
+            readingService.createReading(idUser, reading);
             return WebApiResponse.success(null, "Lectura creada exitosamente", HttpStatus.CREATED.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al crear lectura", e.getMessage(),

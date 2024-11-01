@@ -9,7 +9,7 @@ public interface ReadingService {
 
     public List<Reading> getAllReadings();
 
-    public void createReading(CreateReadingDto reading);
+    public void createReading(Long idUser, CreateReadingDto reading);
 
     public void updateReading(Long idReading, UpdateReadingDto reading);
 
