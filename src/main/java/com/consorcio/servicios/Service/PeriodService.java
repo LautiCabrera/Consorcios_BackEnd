@@ -10,6 +10,8 @@ public interface PeriodService {
 
     public List<ReadPeriodDto> getPeriodByModalityId(Long idModality);
 
+    public List<ReadPeriodDto> getPeriodsActives();
+
     public void createPeriod(Period period);
 
     public void updatePeriod(Period period);

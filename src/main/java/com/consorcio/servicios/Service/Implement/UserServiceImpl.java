@@ -73,8 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUsersActives(Role role, UserStatus status) {
-        List<UserDto> users = userRepository.findActiveUsersWithRole(role, status);
-        return users;
+        return userRepository.findActiveUsersWithRole(role, status);
     }
 
 }

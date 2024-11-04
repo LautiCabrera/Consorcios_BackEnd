@@ -15,4 +15,9 @@ public interface PeriodRepository extends JpaRepository<Period, Long> {
             "FROM Period p WHERE p.idModality = :idModality")
     List<ReadPeriodDto> findPeriodsByModalityId(@Param("idModality") Long idModality);
 
+    @Query("SELECT new com.consorcio.servicios.Dto.Read.ReadPeriodDto(p.idPeriod, p.name, p.idModality) " +
+            "FROM Period p JOIN Modality m ON p.idModality = m.idModality " +
+            "WHERE m.active = true")
+    List<ReadPeriodDto> findPeriodsByActiveModality();
+
 }

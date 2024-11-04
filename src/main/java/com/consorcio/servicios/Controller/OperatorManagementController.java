@@ -1,8 +1,8 @@
 package com.consorcio.servicios.Controller;
 
-import com.consorcio.servicios.Dto.Create.CreateReadingDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
-import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
+import com.consorcio.servicios.Dto.Read.ReadReadingDto;
+import com.consorcio.servicios.Dto.ReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Entity.Modality;
 import com.consorcio.servicios.Entity.Reading;
@@ -109,9 +109,20 @@ public class OperatorManagementController {
     // Gestión de lecturas del usuario
 
     @GetMapping("/readings")
-    public WebApiResponse<List<Reading>> getAllReadings() {
+    public WebApiResponse<List<ReadReadingDto>> getAllReadings() {
         try {
-            List<Reading> readings = readingService.getAllReadings();
+            List<ReadReadingDto> readings = readingService.getAllReadings();
+            return WebApiResponse.success(readings, "Lecturas obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener lecturas", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @GetMapping("/readings/{idUser}")
+    public WebApiResponse<List<ReadReadingDto>> getReadingsByUserId(@PathVariable long idUser) {
+        try {
+            List<ReadReadingDto> readings = readingService.getReadingsByUserId(idUser);
             return WebApiResponse.success(readings, "Lecturas obtenidas exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al obtener lecturas", e.getMessage(),
@@ -120,7 +131,7 @@ public class OperatorManagementController {
     }
 
     @PostMapping("/register-reading/{idUser}")
-    public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody CreateReadingDto reading) {
+    public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody ReadingDto reading) {
         try {
             readingService.createReading(idUser, reading);
             return WebApiResponse.success(null, "Lectura creada exitosamente", HttpStatus.CREATED.value());
@@ -131,7 +142,7 @@ public class OperatorManagementController {
     }
 
     @PutMapping("/update-reading/{idReading}")
-    public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody UpdateReadingDto reading) {
+    public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody ReadingDto reading) {
         try {
             readingService.updateReading(idReading, reading);
             return WebApiResponse.success(null, "Lectura actualizada exitosamente", HttpStatus.OK.value());
@@ -205,10 +216,22 @@ public class OperatorManagementController {
     public WebApiResponse<List<ReadPeriodDto>> getPeriodByIdModality(@PathVariable Long idModality) {
         try {
             List<ReadPeriodDto> periods = periodService.getPeriodByModalityId(idModality);
-            return WebApiResponse.success(periods, "Modalidad obtenida exitosamente",
+            return WebApiResponse.success(periods, "Periodos obtenidos exitosamente",
                     HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
+            return WebApiResponse.error("Error al obtener periodos", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @GetMapping("/periods-actives")
+    public WebApiResponse<List<ReadPeriodDto>> getPeriodsActive() {
+        try {
+            List<ReadPeriodDto> periods = periodService.getPeriodsActives();
+            return WebApiResponse.success(periods, "Periodos obtenidos exitosamente",
+                    HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener periodos", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }

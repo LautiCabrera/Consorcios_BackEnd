@@ -1,16 +1,17 @@
 package com.consorcio.servicios.Service;
 
-import com.consorcio.servicios.Dto.Create.CreateReadingDto;
-import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
-import com.consorcio.servicios.Entity.Reading;
+import com.consorcio.servicios.Dto.Read.ReadReadingDto;
+import com.consorcio.servicios.Dto.ReadingDto;
 import java.util.List;
 
 public interface ReadingService {
 
-    public List<Reading> getAllReadings();
+    public List<ReadReadingDto> getAllReadings();
 
-    public void createReading(Long idUser, CreateReadingDto reading);
+    public List<ReadReadingDto> getReadingsByUserId(long idUser);
 
-    public void updateReading(Long idReading, UpdateReadingDto reading);
+    public void createReading(Long idUser, ReadingDto reading);
+
+    public void updateReading(Long idReading, ReadingDto reading);
 
 }

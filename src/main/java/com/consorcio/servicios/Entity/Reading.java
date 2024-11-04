@@ -20,9 +20,6 @@ public class Reading {
     private Double reading;
 
     @Column(nullable = false)
-    private LocalDateTime dateReading;
-
-    @Column(nullable = false)
     private Long idPeriod;
 
     @Column(nullable = false)
@@ -38,6 +35,6 @@ public class Reading {
     private LocalDateTime dateUpdate;
 
     @Column(name = "date_register")
-    private LocalDateTime datRegister;
+    private LocalDateTime dateRegister;
 
 }
