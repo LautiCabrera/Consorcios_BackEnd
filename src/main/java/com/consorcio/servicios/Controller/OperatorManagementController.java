@@ -4,6 +4,7 @@ import com.consorcio.servicios.Dto.Create.CreateReadingDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
 import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
+import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Modality;
 import com.consorcio.servicios.Entity.Reading;
 import com.consorcio.servicios.Enums.UserStatus;
@@ -11,6 +12,7 @@ import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
+import com.consorcio.servicios.Service.BillService;
 import com.consorcio.servicios.Service.ModalityService;
 import com.consorcio.servicios.Service.PeriodService;
 import com.consorcio.servicios.Service.ReadingService;
@@ -36,9 +38,10 @@ public class OperatorManagementController {
     private ModalityService modalityService;
     @Autowired
     private PeriodService periodService;
+    @Autowired
+    private BillService billService;
 
     // Gestion de usuarios
-
     @GetMapping("/users")
     public WebApiResponse<List<UserDto>> getAllUsers() {
         try {
@@ -107,7 +110,6 @@ public class OperatorManagementController {
     }
 
     // Gestión de lecturas del usuario
-
     @GetMapping("/readings")
     public WebApiResponse<List<Reading>> getAllReadings() {
         try {
@@ -142,7 +144,6 @@ public class OperatorManagementController {
     }
 
     // Gestion de Modalidades
-
     @GetMapping("/modalities")
     public WebApiResponse<List<Modality>> getAllModalities() {
         try {
@@ -200,7 +201,6 @@ public class OperatorManagementController {
     }
 
     // Gestion de Periodos
-
     @GetMapping("/period/{idModality}")
     public WebApiResponse<List<ReadPeriodDto>> getPeriodByIdModality(@PathVariable Long idModality) {
         try {
@@ -214,7 +214,16 @@ public class OperatorManagementController {
     }
 
     // Gestion de Medidores
-
-
+    
+    // Gestion de facturas 
+    @PostMapping("/bill/{idMeter}/{idPeriod}")
+    public WebApiResponse<Bill> generateBill(@PathVariable Long idMeter, @PathVariable Long idPeriod) {
+        try {
+            Bill bill = billService.generateBill(idMeter, idPeriod);
+            return WebApiResponse.success(bill, "Factura generada exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al generar la factura", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
 
 }
