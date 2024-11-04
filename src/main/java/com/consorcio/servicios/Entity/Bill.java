@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,43 +26,56 @@ public class Bill {
 
     @Column(name = "id_meter")
     private Long idMeter;
-    
-    @Column(name ="id_reading")
+
+    @Column(name = "id_reading")
     private Long idReading;
-    
+
     @Column(name = "normal_consumption")
     private Double normalConsumption;
-    
+
     @Column(name = "social_quota")
     private Long socialQuota;
-    
+
     @Column(name = "surplus")
     private Double surplus;
-    
+
     @Column(name = "interests")
-    private Long interests; 
-    
+    private Long interests;
+
     @Column(name = "fines")
-    private Long fines; 
-    
+    private Long fines;
+
     @Column(name = "reconnection")
-    private Long reconnection; 
-    
+    private Long reconnection;
+
     @Column(name = "connection")
-    private Long connection; 
-    
+    private Long connection;
+
     @Column(name = "materials")
     private Long materials;
-    
+
     @Column(name = "others")
     private Long others;
-    
+
     @Column(name = "discount")
-    private Long discount; 
-    
+    private Long discount;
+
     @Column(name = "total")
     private Double total;
-    
+
     @Column(name = "paid_status")
-    private Boolean paidStatus; 
+    private Boolean paidStatus;
+
+    @Column(name = "id_user_register")
+    private Long idUserRegister;
+    
+    @Column(name = "id_user_update")
+    private Long idUserUpdate;
+    
+    @Column(name = "date_register")
+    private LocalDateTime dateRegister;
+
+    @Column(name = "date_update")
+    private LocalDateTime dateUpdate;
+
 }
