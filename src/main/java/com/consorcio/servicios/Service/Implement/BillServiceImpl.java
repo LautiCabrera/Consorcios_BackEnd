@@ -19,13 +19,10 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     private BillRepository billRepository;
-
     @Autowired
     private ReadingRepository readingRepository;
-
     @Autowired
     private MeterRepository meterRepository;
-
     @Autowired
     private FeeRepository feeRepository;
 
@@ -37,6 +34,11 @@ public class BillServiceImpl implements BillService {
     @Override
     public Bill getBillById(Long Id) {
         return billRepository.findById(Id).orElse(null);
+    }
+    
+     @Override
+    public Bill getBillByUser(Long IdUser, Long idPeriod) {
+        return billRepository.findById(idUser, idPeriod).orElse(null); //Cambiar
     }
 
     @Override

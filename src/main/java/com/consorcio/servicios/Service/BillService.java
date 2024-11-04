@@ -7,6 +7,7 @@ public interface BillService {
     
     public List<Bill> getAllBill();
     public Bill getBillById (Long Id);
+    public Bill getBillByUser (Long IdUser, Long idPeriod);
     public Bill generateBill (Long idMeter, Long idPeriod);
     public List<Bill> generateBillForAllMeters(Long idPeriod);
     public void sendBillToUser (Bill bill);

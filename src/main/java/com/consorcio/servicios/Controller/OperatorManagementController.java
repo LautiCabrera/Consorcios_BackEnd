@@ -214,12 +214,13 @@ public class OperatorManagementController {
     }
 
     // Gestion de Medidores
+    
     // Gestion de facturas 
     @PostMapping("/bill/{idMeter}/{idPeriod}")
     public WebApiResponse<Bill> generateBill(@PathVariable Long idMeter, @PathVariable Long idPeriod) {
         try {
-            Bill bill = billService.generateBill(idMeter, idPeriod);
-            return WebApiResponse.success(bill, "Factura generada exitosamente", HttpStatus.OK.value());
+            billService.generateBill(idMeter, idPeriod);
+            return WebApiResponse.success(null, "Factura generada exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al generar la factura", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
@@ -228,7 +229,17 @@ public class OperatorManagementController {
     @PostMapping("/bill/{idPeriod}")
     public WebApiResponse<List<Bill>> generateBillForAllMeter(Long idPeriod) {
         try {
-            List <Bill> bill = billService.generateBillForAllMeters(idPeriod);
+            billService.generateBillForAllMeters(idPeriod);
+            return WebApiResponse.success(null, "Facturas generadas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al generar las facturas", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+    
+     @GetMapping("/bill")
+    public WebApiResponse<List<Bill>> getAllBill() {
+        try {
+            List <Bill> bill = billService.getAllBill();
             return WebApiResponse.success(bill, "Facturas generadas exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al generar las facturas", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
