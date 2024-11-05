@@ -9,6 +9,7 @@ import java.util.Date;
 public class ReadReadingDto {
 
     private Long idReading;
+    private Long idPeriod;
     private Double reading;
     private String period;
     private Date date;

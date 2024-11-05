@@ -11,14 +11,14 @@ import java.util.List;
 @Repository
 public interface ReadingRepository extends JpaRepository<Reading, Long> {
 
-    @Query("SELECT NEW com.consorcio.servicios.Dto.Read.ReadReadingDto(r.idReading, r.reading, p.name, DATE(r.dateRegister)) "
+    @Query("SELECT NEW com.consorcio.servicios.Dto.Read.ReadReadingDto(r.idReading, p.idPeriod, r.reading, p.name, DATE(r.dateRegister)) "
             + "FROM Reading r "
             + "JOIN Meter m ON r.idMeter = m.idMeter "
             + "JOIN Residence res ON m.idMeter = res.idMeter "
             + "JOIN Period p ON r.idPeriod = p.idPeriod")
     List<ReadReadingDto> findAllReadings();
 
-    @Query("SELECT NEW com.consorcio.servicios.Dto.Read.ReadReadingDto(r.idReading, r.reading, p.name, DATE(r.dateRegister)) "
+    @Query("SELECT NEW com.consorcio.servicios.Dto.Read.ReadReadingDto(r.idReading, p.idPeriod, r.reading, p.name, DATE(r.dateRegister)) "
             + "FROM Reading r "
             + "JOIN Meter m ON r.idMeter = m.idMeter "
             + "JOIN Residence res ON m.idMeter = res.idMeter "
