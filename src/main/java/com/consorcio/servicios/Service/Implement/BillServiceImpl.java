@@ -1,6 +1,7 @@
 package com.consorcio.servicios.Service.Implement;
 
 import com.consorcio.servicios.Dto.Read.BillDto;
+import com.consorcio.servicios.Dto.Read.PaymentDto;
 import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Fee;
 import com.consorcio.servicios.Entity.Meter;
@@ -87,6 +88,7 @@ public class BillServiceImpl implements BillService {
                 .materials(completar)
                 .others(completar)
                 .discount(completar)
+                .paidStatus(false)
                 .total(total)
                 .dateRegister(LocalDateTime.now())
                 .dateUpdate(LocalDateTime.now())
@@ -122,8 +124,14 @@ public class BillServiceImpl implements BillService {
 
     }
 
+    @Override
+    public List<PaymentDto> getPaymentsByUserId(Long idUser) {
+        return billRepository.findPaymentsByUserId(idUser);
+    }
+
     private double calculateSurplusCharge(double surplus) {
         double extraChargePerUnit = 50.0;
         return surplus * extraChargePerUnit;
     }
+
 }

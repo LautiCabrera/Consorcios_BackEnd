@@ -1,11 +1,13 @@
 package com.consorcio.servicios.Repository;
 
 import com.consorcio.servicios.Dto.Read.BillDto;
+import com.consorcio.servicios.Dto.Read.PaymentDto;
 import com.consorcio.servicios.Entity.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
@@ -26,4 +28,13 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
             + "JOIN Reading reading ON reading.idMeter = m.idMeter AND reading.idPeriod = :idPeriod "
             + "WHERE u.idUser = :idUser")
     BillDto findBillDetailsByUserAndPeriod(@Param("idUser") Long idUser, @Param("idPeriod") Long idPeriod);
+
+    @Query("SELECT new com.consorcio.servicios.Dto.Read.PaymentDto(b.idBill, DATE(b.dateRegister), b.paidStatus, b.total) " +
+            "FROM Bill b " +
+            "JOIN Meter m ON b.idMeter = m.idMeter " +
+            "JOIN Residence r ON m.idMeter = r.idMeter " +
+            "JOIN User u ON r.idUser = u.idUser " +
+            "WHERE u.idUser = :idUser")
+    List<PaymentDto> findPaymentsByUserId(@Param("idUser") Long idUser);
+
 }

@@ -1,6 +1,7 @@
 package com.consorcio.servicios.Controller;
 
 import com.consorcio.servicios.Dto.Read.BillDto;
+import com.consorcio.servicios.Dto.Read.PaymentDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
 import com.consorcio.servicios.Dto.Read.ReadReadingDto;
 import com.consorcio.servicios.Dto.ReadingDto;
@@ -267,6 +268,17 @@ public class OperatorManagementController {
         try {
             BillDto bill = billService.getBillByUserAndPeriod(idUser, idPeriod);
             return WebApiResponse.success(bill, "Datos de factura enviados exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @GetMapping("/payment/{idUser}")
+    public WebApiResponse<List<PaymentDto>> getPaymentsByUserId(@PathVariable Long idUser) {
+        try {
+            List<PaymentDto> payments = billService.getPaymentsByUserId(idUser);
+            return WebApiResponse.success(payments, "Datos de factura enviados exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
