@@ -1,6 +1,7 @@
 package com.consorcio.servicios.Controller;
 
 import com.consorcio.servicios.Dto.Create.CreateReadingDto;
+import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
 import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
@@ -214,9 +215,8 @@ public class OperatorManagementController {
     }
 
     // Gestion de Medidores
-    
     // Gestion de facturas 
-    @PostMapping("/bill/{idMeter}/{idPeriod}")
+    @PostMapping("/bill/generate/{idMeter}/{idPeriod}")
     public WebApiResponse<Bill> generateBill(@PathVariable Long idMeter, @PathVariable Long idPeriod) {
         try {
             billService.generateBill(idMeter, idPeriod);
@@ -226,7 +226,7 @@ public class OperatorManagementController {
         }
     }
 
-    @PostMapping("/bill/{idPeriod}")
+    @PostMapping("/bill/generate/{idPeriod}")
     public WebApiResponse<List<Bill>> generateBillForAllMeter(Long idPeriod) {
         try {
             billService.generateBillForAllMeters(idPeriod);
@@ -235,14 +235,14 @@ public class OperatorManagementController {
             return WebApiResponse.error("Error al generar las facturas", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
-    
-     @GetMapping("/bill")
-    public WebApiResponse<List<Bill>> getAllBill() {
+
+    @GetMapping("/bill/{idUser}/{idPeriod}")
+    public WebApiResponse<BillDto> getBillByIdUserAndIdPeriod(@PathVariable Long idUser, @PathVariable Long idPeriod) {
         try {
-            List <Bill> bill = billService.getAllBill();
-            return WebApiResponse.success(bill, "Facturas generadas exitosamente", HttpStatus.OK.value());
+            BillDto bill = billService.getBillByUserAndPeriod(idUser, idPeriod);
+            return WebApiResponse.success(bill, "Datos de factura enviados exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al generar las facturas", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 }

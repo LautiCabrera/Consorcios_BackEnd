@@ -1,30 +1,31 @@
 package com.consorcio.servicios.Dto.Read;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class BillDto {
-    
-    String userName;
-    String adress;
-    String email;
-    String location;
-    String province;
-    String country; 
-    Date date_register;
-    Long id_bill;
-    Double normalConsumption;
-    Long socialQuota;
-    Double surplus;
-    Long interests;
-    Long fines;
-    Long reconnection;
-    Long connection;
-    Long materials;
-    Long others;
-    Long discount;
-    Double total;
+
+    private String userFirstName;
+    private String userLastName;
+    private String address;
+    private String email;
+    private String location;
+    private String province;
+    private String country;
+    private LocalDateTime dateBill;
+    private Long idBill;
+    private Double normalConsumption;
+    private Long socialQuota;
+    private Double surplus;
+    private Long interests;
+    private Long fines;
+    private Long reconnection;
+    private Long connection;
+    private Long materials;
+    private Long others;
+    private Long discount;
+    private Double total;
 }

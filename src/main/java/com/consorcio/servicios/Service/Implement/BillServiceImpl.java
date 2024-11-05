@@ -1,5 +1,6 @@
 package com.consorcio.servicios.Service.Implement;
 
+import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Fee;
 import com.consorcio.servicios.Entity.Meter;
@@ -35,10 +36,10 @@ public class BillServiceImpl implements BillService {
     public Bill getBillById(Long Id) {
         return billRepository.findById(Id).orElse(null);
     }
-    
-     @Override
-    public Bill getBillByUser(Long IdUser, Long idPeriod) {
-        return billRepository.findById(idUser, idPeriod).orElse(null); //Cambiar
+
+    @Override
+    public BillDto getBillByUserAndPeriod(Long IdUser, Long idPeriod) {
+        return billRepository.findBillDetailsByUserAndPeriod(IdUser, idPeriod);
     }
 
     @Override
