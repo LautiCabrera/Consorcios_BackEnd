@@ -253,7 +253,7 @@ public class OperatorManagementController {
     }
 
     @PostMapping("/bill/generate/{idPeriod}")
-    public WebApiResponse<List<Bill>> generateBillForAllMeter(Long idPeriod) {
+    public WebApiResponse<Void> generateBillForAllMeter(Long idPeriod) {
         try {
             billService.generateBillForAllMeters(idPeriod);
             return WebApiResponse.success(null, "Facturas generadas exitosamente", HttpStatus.OK.value());

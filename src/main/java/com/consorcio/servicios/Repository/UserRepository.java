@@ -22,12 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT NEW com.consorcio.servicios.Dto.UserDto(u.idUser, u.username, u.lastName, u.firstName, u.dni, u.phone, u.status) "
             + "FROM User u WHERE u.role = :role AND u.status = :status")
-    List<UserDto> findActiveUsersWithRole(
-            @Param("role") Role role,
-            @Param("status") UserStatus status
-    );
+    List<UserDto> findActiveUsersWithRole(@Param("role") Role role, @Param("status") UserStatus status);
 
     @Query("SELECT u.role FROM User u WHERE u.username = :username")
     Optional<Role> findRoleForUser(String username);
+
+    List<User> findByRoleAndStatus(Role role, UserStatus status);
 
 }

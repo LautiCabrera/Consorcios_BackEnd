@@ -2,16 +2,12 @@ package com.consorcio.servicios.Service.Implement;
 
 import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.PaymentDto;
-import com.consorcio.servicios.Entity.Bill;
-import com.consorcio.servicios.Entity.Fee;
-import com.consorcio.servicios.Entity.Meter;
-import com.consorcio.servicios.Entity.Reading;
-import com.consorcio.servicios.Repository.BillRepository;
-import com.consorcio.servicios.Repository.FeeRepository;
-import com.consorcio.servicios.Repository.MeterRepository;
-import com.consorcio.servicios.Repository.ReadingRepository;
+import com.consorcio.servicios.Entity.*;
+import com.consorcio.servicios.Enums.UserStatus;
+import com.consorcio.servicios.Repository.*;
 import com.consorcio.servicios.Security.Config.Authenticated;
 import com.consorcio.servicios.Security.Config.CustomUserDetails;
+import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Service.BillService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +24,8 @@ public class BillServiceImpl implements BillService {
     private ReadingRepository readingRepository;
     @Autowired
     private MeterRepository meterRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private FeeRepository feeRepository;
 
@@ -47,13 +45,15 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill generateBill(Long idUser, Long idPeriod) {
+    public void generateBill(Long idUser, Long idPeriod) {
         // Obtener lectura actual y lectura anterior
         Reading currentReading = readingRepository.findCurrentReadingByMeterAndPeriod(idUser, idPeriod);
         Reading previousReading = readingRepository.findPreviousReadingByMeter(idUser, idPeriod);
+
         if (currentReading == null || previousReading == null) {
             throw new RuntimeException("Lectura actual o anterior no encontrada");
         }
+
         double consumption = currentReading.getReading() - previousReading.getReading();
         // Obtener el medidor (Meter) para el idUser dado
         Meter meter = meterRepository.findMeterByUserId(idUser);
@@ -97,26 +97,23 @@ public class BillServiceImpl implements BillService {
         bill.setIdUserRegister(currentUser.getUser().getIdUser());
         bill.setIdUserUpdate(currentUser.getUser().getIdUser());
 
-        return billRepository.save(bill);
+        billRepository.save(bill);
     }
 
     @Override
-    public List<Bill> generateBillForAllMeters(Long idPeriod) {
+    public void generateBillForAllMeters(Long idPeriod) {
         // Obtener todos los medidores
-        List<Meter> meters = meterRepository.findAll();
-        // Lista para almacenar las facturas generadas
-        List<Bill> bills = new ArrayList<>();
-        for (Meter meter : meters) {
+        List<User> users = userRepository.findByRoleAndStatus(Role.ROLE_USER, UserStatus.ACTIVE);
+        for (User user : users) {
             try {
-                // Llamamos a generateBill para cada medidor y añadimos la factura generada a la lista
-                Bill bill = generateBill(meter.getIdMeter(), idPeriod);
-                bills.add(bill);
+                System.out.println("Generando factura para usuario: " + user.getIdUser());
+                // Llamamos a generateBill para cada usuario y añadimos la factura generada a la lista
+                generateBill(user.getIdUser(), idPeriod);
             } catch (Exception e) {
                 // Manejo de errores si es necesario (por ejemplo, si faltan lecturas)
-                System.out.println("Error al generar la factura para el medidor " + meter.getIdMeter() + ": " + e.getMessage());
+                System.out.println("Error al generar la factura para el usuario " + user.getIdUser() + ": " + e.getMessage());
             }
         }
-        return bills;
     }
 
     @Override

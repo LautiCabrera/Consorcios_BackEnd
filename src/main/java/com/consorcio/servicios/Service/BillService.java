@@ -13,9 +13,9 @@ public interface BillService {
 
     public BillDto getBillByUserAndPeriod(Long IdUser, Long idPeriod);
 
-    public Bill generateBill(Long idMeter, Long idPeriod);
+    public void generateBill(Long idMeter, Long idPeriod);
 
-    public List<Bill> generateBillForAllMeters(Long idPeriod);
+    public void generateBillForAllMeters(Long idPeriod);
 
     public void sendBillToUser(Bill bill);
 
