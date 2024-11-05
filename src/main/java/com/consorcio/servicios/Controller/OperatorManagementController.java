@@ -238,12 +238,12 @@ public class OperatorManagementController {
     }
 
     // Gestion de Medidores
-
-    // Gestion de facturas
-    @PostMapping("/bill/generate/{idMeter}/{idPeriod}")
-    public WebApiResponse<Bill> generateBill(@PathVariable Long idMeter, @PathVariable Long idPeriod) {
+    
+    // Gestion de facturas 
+    @PostMapping("/bill/generate/{idUser}/{idPeriod}")
+    public WebApiResponse<Bill> generateBill(@PathVariable Long idUser, @PathVariable Long idPeriod) {
         try {
-            billService.generateBill(idMeter, idPeriod);
+            billService.generateBill(idUser, idPeriod);
             return WebApiResponse.success(null, "Factura generada exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al generar la factura", e.getMessage(),

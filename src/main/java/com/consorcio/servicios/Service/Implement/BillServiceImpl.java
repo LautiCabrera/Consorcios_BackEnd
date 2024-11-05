@@ -46,19 +46,16 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill generateBill(Long idMeter, Long idPeriod) {
+    public Bill generateBill(Long idUser, Long idPeriod) {
         // Obtener lectura actual y lectura anterior
-        Reading currentReading = readingRepository.findCurrentReadingByMeterAndPeriod(idMeter, idPeriod);
-        Reading previousReading = readingRepository.findPreviousReadingByMeter(idMeter, idPeriod);
-
+        Reading currentReading = readingRepository.findCurrentReadingByMeterAndPeriod(idUser, idPeriod);
+        Reading previousReading = readingRepository.findPreviousReadingByMeter(idUser, idPeriod);
         if (currentReading == null || previousReading == null) {
             throw new RuntimeException("Lectura actual o anterior no encontrada");
         }
         double consumption = currentReading.getReading() - previousReading.getReading();
-
-        // Obtener el medidor (Meter) para el idMeter dado
-        Meter meter = meterRepository.findByIdMeter(idMeter);
-
+        // Obtener el medidor (Meter) para el idUser dado
+        Meter meter = meterRepository.findMeterByUserId(idUser);
         // Obtener la tarifa (Fee) usando el idFee del medidor
         Fee fee = feeRepository.findByIdFee(meter.getIdFee());
 
@@ -78,7 +75,7 @@ public class BillServiceImpl implements BillService {
 
         // Crear la factura
         Bill bill = Bill.builder()
-                .idMeter(idMeter)
+                .idMeter(meter.getIdMeter())
                 .idReading(currentReading.getIdReading())
                 .normalConsumption(normalConsumption)
                 .socialQuota(completar)
