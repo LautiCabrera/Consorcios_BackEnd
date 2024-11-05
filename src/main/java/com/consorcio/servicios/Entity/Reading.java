@@ -16,13 +16,13 @@ public class Reading {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReading;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "reading")
     private Double reading;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "id_period")
     private Long idPeriod;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "id_meter")
     private Long idMeter;
 
     @Column(name = "id_user_update")
