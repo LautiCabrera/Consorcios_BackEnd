@@ -33,6 +33,6 @@ public class Period {
     private LocalDateTime dateUpdate;
 
     @Column(name = "date_register")
-    private LocalDateTime datRegister;
+    private LocalDateTime dateRegister;
 
 }

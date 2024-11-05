@@ -10,6 +10,8 @@ import com.consorcio.servicios.Security.Dto.LoginRequestDto;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import jakarta.validation.Valid;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,6 +61,8 @@ public class AuthService {
                 .dni(request.getDni())
                 .role(role)
                 .status(UserStatus.ACTIVE)
+                .dateRegister(LocalDateTime.now())
+                .dateUpdate(LocalDateTime.now())
                 .build();
 
         user.setIdUserRegister(currentUser.getUser().getIdUser());

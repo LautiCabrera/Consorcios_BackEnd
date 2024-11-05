@@ -3,7 +3,8 @@ package com.consorcio.servicios.Controller;
 import com.consorcio.servicios.Dto.Create.CreateReadingDto;
 import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
-import com.consorcio.servicios.Dto.Update.UpdateReadingDto;
+import com.consorcio.servicios.Dto.Read.ReadReadingDto;
+import com.consorcio.servicios.Dto.ReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Modality;
@@ -112,9 +113,20 @@ public class OperatorManagementController {
 
     // Gestión de lecturas del usuario
     @GetMapping("/readings")
-    public WebApiResponse<List<Reading>> getAllReadings() {
+    public WebApiResponse<List<ReadReadingDto>> getAllReadings() {
         try {
-            List<Reading> readings = readingService.getAllReadings();
+            List<ReadReadingDto> readings = readingService.getAllReadings();
+            return WebApiResponse.success(readings, "Lecturas obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener lecturas", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @GetMapping("/readings/{idUser}")
+    public WebApiResponse<List<ReadReadingDto>> getReadingsByUserId(@PathVariable long idUser) {
+        try {
+            List<ReadReadingDto> readings = readingService.getReadingsByUserId(idUser);
             return WebApiResponse.success(readings, "Lecturas obtenidas exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al obtener lecturas", e.getMessage(),
@@ -123,7 +135,7 @@ public class OperatorManagementController {
     }
 
     @PostMapping("/register-reading/{idUser}")
-    public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody CreateReadingDto reading) {
+    public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody ReadingDto reading) {
         try {
             readingService.createReading(idUser, reading);
             return WebApiResponse.success(null, "Lectura creada exitosamente", HttpStatus.CREATED.value());
@@ -134,7 +146,7 @@ public class OperatorManagementController {
     }
 
     @PutMapping("/update-reading/{idReading}")
-    public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody UpdateReadingDto reading) {
+    public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody ReadingDto reading) {
         try {
             readingService.updateReading(idReading, reading);
             return WebApiResponse.success(null, "Lectura actualizada exitosamente", HttpStatus.OK.value());
@@ -159,7 +171,8 @@ public class OperatorManagementController {
     @GetMapping("/modality/{idModality}")
     public WebApiResponse<Modality> getModalityById(@PathVariable Long idModality) {
         try {
-            return WebApiResponse.success(modalityService.getModalityById(idModality), "Modalidad obtenida exitosamente",
+            return WebApiResponse.success(modalityService.getModalityById(idModality),
+                    "Modalidad obtenida exitosamente",
                     HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
@@ -206,23 +219,37 @@ public class OperatorManagementController {
     public WebApiResponse<List<ReadPeriodDto>> getPeriodByIdModality(@PathVariable Long idModality) {
         try {
             List<ReadPeriodDto> periods = periodService.getPeriodByModalityId(idModality);
-            return WebApiResponse.success(periods, "Modalidad obtenida exitosamente",
+            return WebApiResponse.success(periods, "Periodos obtenidos exitosamente",
                     HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al obtener modalidad", e.getMessage(),
+            return WebApiResponse.error("Error al obtener periodos", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @GetMapping("/periods-actives")
+    public WebApiResponse<List<ReadPeriodDto>> getPeriodsActive() {
+        try {
+            List<ReadPeriodDto> periods = periodService.getPeriodsActives();
+            return WebApiResponse.success(periods, "Periodos obtenidos exitosamente",
+                    HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener periodos", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
     // Gestion de Medidores
-    // Gestion de facturas 
+
+    // Gestion de facturas
     @PostMapping("/bill/generate/{idMeter}/{idPeriod}")
     public WebApiResponse<Bill> generateBill(@PathVariable Long idMeter, @PathVariable Long idPeriod) {
         try {
             billService.generateBill(idMeter, idPeriod);
             return WebApiResponse.success(null, "Factura generada exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al generar la factura", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return WebApiResponse.error("Error al generar la factura", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
@@ -232,7 +259,8 @@ public class OperatorManagementController {
             billService.generateBillForAllMeters(idPeriod);
             return WebApiResponse.success(null, "Facturas generadas exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al generar las facturas", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return WebApiResponse.error("Error al generar las facturas", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
@@ -242,7 +270,9 @@ public class OperatorManagementController {
             BillDto bill = billService.getBillByUserAndPeriod(idUser, idPeriod);
             return WebApiResponse.success(bill, "Datos de factura enviados exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
+
 }

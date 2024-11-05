@@ -25,6 +25,11 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
+    public List<ReadPeriodDto> getPeriodsActives() {
+        return periodRepository.findPeriodsByActiveModality();
+    }
+
+    @Override
     public void createPeriod(Period period) {
 
     }

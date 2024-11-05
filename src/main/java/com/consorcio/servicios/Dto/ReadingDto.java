@@ -1,4 +1,4 @@
-package com.consorcio.servicios.Dto.Create;
+package com.consorcio.servicios.Dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateReadingDto {
+public class ReadingDto {
 
     @NotBlank
     private Double reading;
