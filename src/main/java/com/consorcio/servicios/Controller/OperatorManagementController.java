@@ -278,9 +278,20 @@ public class OperatorManagementController {
     public WebApiResponse<List<PaymentDto>> getPaymentsByUserId(@PathVariable Long idUser) {
         try {
             List<PaymentDto> payments = billService.getPaymentsByUserId(idUser);
-            return WebApiResponse.success(payments, "Datos de factura enviados exitosamente", HttpStatus.OK.value());
+            return WebApiResponse.success(payments, "Datos de pagos enviados exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
-            return WebApiResponse.error("Error al enviar datos de factura", e.getMessage(),
+            return WebApiResponse.error("Error al enviar datos de pagos", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @PostMapping("/payment/{idBill}")
+    public WebApiResponse<Void> changePaymentStatus(@PathVariable Long idBill) {
+        try {
+            billService.changePaymentStatusByBillId(idBill);
+            return WebApiResponse.success(null, "Cambio de estado de pago realizado exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al cambiar el estado del pago", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }

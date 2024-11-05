@@ -3,7 +3,9 @@ package com.consorcio.servicios.Repository;
 import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.PaymentDto;
 import com.consorcio.servicios.Entity.Bill;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -36,5 +38,10 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
             "JOIN User u ON r.idUser = u.idUser " +
             "WHERE u.idUser = :idUser")
     List<PaymentDto> findPaymentsByUserId(@Param("idUser") Long idUser);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Bill b SET b.paidStatus = NOT b.paidStatus WHERE b.idBill = :idBill")
+    void togglePaidStatusById(@Param("idBill") Long idBill);
 
 }

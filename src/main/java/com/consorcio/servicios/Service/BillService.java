@@ -21,4 +21,6 @@ public interface BillService {
 
     public List<PaymentDto> getPaymentsByUserId(Long idUser);
 
+    public void changePaymentStatusByBillId(Long idBill);
+
 }

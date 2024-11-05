@@ -129,6 +129,11 @@ public class BillServiceImpl implements BillService {
         return billRepository.findPaymentsByUserId(idUser);
     }
 
+    @Override
+    public void changePaymentStatusByBillId(Long idBill) {
+        billRepository.togglePaidStatusById(idBill);
+    }
+
     private double calculateSurplusCharge(double surplus) {
         double extraChargePerUnit = 50.0;
         return surplus * extraChargePerUnit;
