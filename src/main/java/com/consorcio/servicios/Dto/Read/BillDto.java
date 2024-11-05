@@ -1,6 +1,6 @@
 package com.consorcio.servicios.Dto.Read;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class BillDto {
     private String location;
     private String province;
     private String country;
-    private LocalDateTime dateBill;
+    private Date dateBill;
     private Long idBill;
     private Double normalConsumption;
     private Long socialQuota;

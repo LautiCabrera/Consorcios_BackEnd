@@ -73,10 +73,6 @@ public class LocalidadesSeeder implements CommandLineRunner {
 
                 // Guardar todas las localidades
                 locationRepository.saveAll(locationList);
-
-                System.out.println("Datos de Argentina, provincias y localidades guardados exitosamente.");
-            } else {
-                System.out.println("Las tablas ya contienen datos, no se realizó la descarga.");
             }
         } catch (Exception e) {
             System.err.println("Error al descargar y guardar los datos: " + e.getMessage());

@@ -13,7 +13,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     //Buscar factura por usuario y periodo
     @Query("SELECT new com.consorcio.servicios.Dto.Read.BillDto("
             + "u.firstName, u.lastName, r.street, u.username, l.name, "
-            + "prov.name, country.name, b.dateRegister, b.idBill, b.normalConsumption, "
+            + "prov.name, country.name, DATE(b.dateRegister), b.idBill, b.normalConsumption, "
             + "b.socialQuota, b.surplus, b.interests, b.fines, b.reconnection, "
             + "b.connection, b.materials, b.others, b.discount, b.total) "
             + "FROM Bill b "

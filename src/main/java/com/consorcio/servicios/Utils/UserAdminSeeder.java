@@ -38,10 +38,6 @@ public class UserAdminSeeder implements CommandLineRunner {
 
             // Guardar el usuario admin en la base de datos
             userRepository.save(adminUser);
-
-            System.out.println("Usuario administrador creado exitosamente.");
-        } else {
-            System.out.println("El usuario administrador ya existe.");
         }
     }
 

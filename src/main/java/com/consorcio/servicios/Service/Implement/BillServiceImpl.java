@@ -9,7 +9,10 @@ import com.consorcio.servicios.Repository.BillRepository;
 import com.consorcio.servicios.Repository.FeeRepository;
 import com.consorcio.servicios.Repository.MeterRepository;
 import com.consorcio.servicios.Repository.ReadingRepository;
+import com.consorcio.servicios.Security.Config.Authenticated;
+import com.consorcio.servicios.Security.Config.CustomUserDetails;
 import com.consorcio.servicios.Service.BillService;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,23 +50,32 @@ public class BillServiceImpl implements BillService {
         // Obtener lectura actual y lectura anterior
         Reading currentReading = readingRepository.findCurrentReadingByMeterAndPeriod(idMeter, idPeriod);
         Reading previousReading = readingRepository.findPreviousReadingByMeter(idMeter, idPeriod);
+
         if (currentReading == null || previousReading == null) {
             throw new RuntimeException("Lectura actual o anterior no encontrada");
         }
         double consumption = currentReading.getReading() - previousReading.getReading();
+
         // Obtener el medidor (Meter) para el idMeter dado
         Meter meter = meterRepository.findByIdMeter(idMeter);
+
         // Obtener la tarifa (Fee) usando el idFee del medidor
         Fee fee = feeRepository.findByIdFee(meter.getIdFee());
+
         // Obtener datos de la tarifa
         double price = fee.getPrice();
         double consumptionMax = fee.getConsumptionMax();
+
         // Calcular total basado en el consumo y tarifa
         double normalConsumption = Math.min(consumption, consumptionMax);
         double surplus = Math.max(consumption - consumptionMax, 0);
         double total = price + (surplus > 0 ? calculateSurplusCharge(surplus) : 0);
+
         //Variable para completar los otros campos de la factura
         long completar = 98;
+
+        CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
+
         // Crear la factura
         Bill bill = Bill.builder()
                 .idMeter(idMeter)
@@ -79,7 +91,12 @@ public class BillServiceImpl implements BillService {
                 .others(completar)
                 .discount(completar)
                 .total(total)
+                .dateRegister(LocalDateTime.now())
+                .dateUpdate(LocalDateTime.now())
                 .build();
+
+        bill.setIdUserRegister(currentUser.getUser().getIdUser());
+        bill.setIdUserUpdate(currentUser.getUser().getIdUser());
 
         return billRepository.save(bill);
     }

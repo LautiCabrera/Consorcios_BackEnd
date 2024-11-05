@@ -12,11 +12,11 @@ import java.util.List;
 public interface ReadingRepository extends JpaRepository<Reading, Long> {
 
     // Obtiene la lectura actual
-    @Query("SELECT r FROM Reading r WHERE r.idMeter = :idMeter AND r.idPeriod = :idPeriod ORDER BY r.dateReading DESC LIMIT 1")
+    @Query("SELECT r FROM Reading r WHERE r.idMeter = :idMeter AND r.idPeriod = :idPeriod ORDER BY r.dateRegister DESC LIMIT 1")
     Reading findCurrentReadingByMeterAndPeriod(Long idMeter, Long idPeriod);
 
     // Obtiene la lectura anterior
-    @Query("SELECT r FROM Reading r WHERE r.idMeter = :idMeter AND r.dateReading < (SELECT MAX(rr.dateReading) FROM Reading rr WHERE rr.idMeter = :idMeter AND rr.idPeriod = :idPeriod) ORDER BY r.dateReading DESC LIMIT 1")
+    @Query("SELECT r FROM Reading r WHERE r.idMeter = :idMeter AND r.dateRegister < (SELECT MAX(rr.dateRegister) FROM Reading rr WHERE rr.idMeter = :idMeter AND rr.idPeriod = :idPeriod) ORDER BY r.dateRegister DESC LIMIT 1")
     Reading findPreviousReadingByMeter(Long idMeter, Long idPeriod);
 
     @Query("SELECT NEW com.consorcio.servicios.Dto.Read.ReadReadingDto(r.idReading, r.reading, p.name, DATE(r.dateRegister)) "

@@ -1,6 +1,5 @@
 package com.consorcio.servicios.Controller;
 
-import com.consorcio.servicios.Dto.Create.CreateReadingDto;
 import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
 import com.consorcio.servicios.Dto.Read.ReadReadingDto;
@@ -8,7 +7,6 @@ import com.consorcio.servicios.Dto.ReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Modality;
-import com.consorcio.servicios.Entity.Reading;
 import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
