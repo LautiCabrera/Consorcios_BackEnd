@@ -70,7 +70,7 @@ public class BillServiceImpl implements BillService {
         double total = price + (surplus > 0 ? calculateSurplusCharge(surplus) : 0);
 
         //Variable para completar los otros campos de la factura
-        long completar = 98;
+        long completar = 0;
 
         CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
 
@@ -79,8 +79,8 @@ public class BillServiceImpl implements BillService {
                 .idMeter(meter.getIdMeter())
                 .idReading(currentReading.getIdReading())
                 .normalConsumption(normalConsumption)
-                .socialQuota(completar)
                 .surplus(surplus)
+                .socialQuota(completar)
                 .interests(completar)
                 .fines(completar)
                 .reconnection(completar)

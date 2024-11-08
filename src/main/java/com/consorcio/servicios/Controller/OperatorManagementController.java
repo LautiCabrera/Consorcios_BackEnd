@@ -1,5 +1,6 @@
 package com.consorcio.servicios.Controller;
 
+import com.consorcio.servicios.Dto.FeeDto;
 import com.consorcio.servicios.Dto.Read.BillDto;
 import com.consorcio.servicios.Dto.Read.PaymentDto;
 import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
@@ -7,17 +8,14 @@ import com.consorcio.servicios.Dto.Read.ReadReadingDto;
 import com.consorcio.servicios.Dto.ReadingDto;
 import com.consorcio.servicios.Dto.UserDto;
 import com.consorcio.servicios.Entity.Bill;
+import com.consorcio.servicios.Entity.Location;
 import com.consorcio.servicios.Entity.Modality;
 import com.consorcio.servicios.Enums.UserStatus;
 import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
-import com.consorcio.servicios.Service.BillService;
-import com.consorcio.servicios.Service.ModalityService;
-import com.consorcio.servicios.Service.PeriodService;
-import com.consorcio.servicios.Service.ReadingService;
-import com.consorcio.servicios.Service.UserService;
+import com.consorcio.servicios.Service.*;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,10 @@ public class OperatorManagementController {
     private PeriodService periodService;
     @Autowired
     private BillService billService;
+    @Autowired
+    private FeeService feeService;
+    @Autowired
+    private LocationService locationService;
 
     // Gestion de usuarios
     @GetMapping("/users")
@@ -292,6 +294,28 @@ public class OperatorManagementController {
             return WebApiResponse.success(null, "Cambio de estado de pago realizado exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al cambiar el estado del pago", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    //Gestion de tarifas
+    @GetMapping("/fee")
+    public WebApiResponse<List<FeeDto>> getAllFee() {
+        try {
+            return WebApiResponse.success(feeService.getAllFee(), "Tarifas obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener tarifas", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    //Gestion de localidades
+    @GetMapping("/locations")
+    public WebApiResponse<List<Location>> getProvinceLocations() {
+        try {
+            return WebApiResponse.success(locationService.getLocationsByProvince(14L), "Locaciones obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener locaciones", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
