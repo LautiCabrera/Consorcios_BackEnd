@@ -3,7 +3,6 @@ package com.consorcio.servicios.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -19,9 +18,6 @@ public class Meter {
 
     @Column(nullable = false, unique = true)
     private Long numberMeter;
-
-    @Column(nullable = false)
-    private Date dateConnection;
 
     @Column(nullable = false)
     private Long idFee;

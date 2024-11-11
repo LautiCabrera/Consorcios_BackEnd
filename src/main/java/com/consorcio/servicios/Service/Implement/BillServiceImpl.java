@@ -10,7 +10,6 @@ import com.consorcio.servicios.Security.Config.CustomUserDetails;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Service.BillService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,19 +45,34 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void generateBill(Long idUser, Long idPeriod) {
-        // Obtener lectura actual y lectura anterior
+        // Obtener la lectura actual
         Reading currentReading = readingRepository.findCurrentReadingByMeterAndPeriod(idUser, idPeriod);
-        Reading previousReading = readingRepository.findPreviousReadingByMeter(idUser, idPeriod);
 
-        if (currentReading == null || previousReading == null) {
-            throw new RuntimeException("Lectura actual o anterior no encontrada");
+        if (currentReading == null) {
+            throw new RuntimeException("Lectura actual no encontrada para el usuario y período especificado.");
         }
 
-        double consumption = currentReading.getReading() - previousReading.getReading();
+        // Obtener la lectura anterior, si existe
+        Reading previousReading = readingRepository.findPreviousReadingByMeter(idUser, idPeriod);
+
+        double consumption = 0; // Inicializamos el consumo
+
+        // Si existe una lectura anterior, calculamos el consumo
+        if (previousReading != null) {
+            consumption = currentReading.getReading() - previousReading.getReading();
+        }
+
         // Obtener el medidor (Meter) para el idUser dado
         Meter meter = meterRepository.findMeterByUserId(idUser);
+        if (meter == null) {
+            throw new RuntimeException("No se encontró un medidor asociado al usuario.");
+        }
+
         // Obtener la tarifa (Fee) usando el idFee del medidor
         Fee fee = feeRepository.findByIdFee(meter.getIdFee());
+        if (fee == null) {
+            throw new RuntimeException("No se encontró una tarifa asociada al medidor.");
+        }
 
         // Obtener datos de la tarifa
         double price = fee.getPrice();
@@ -69,7 +83,7 @@ public class BillServiceImpl implements BillService {
         double surplus = Math.max(consumption - consumptionMax, 0);
         double total = price + (surplus > 0 ? calculateSurplusCharge(surplus) : 0);
 
-        //Variable para completar los otros campos de la factura
+        // Variable para completar otros campos de la factura
         long completar = 0;
 
         CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
@@ -102,16 +116,15 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void generateBillForAllMeters(Long idPeriod) {
-        // Obtener todos los medidores
-        List<User> users = userRepository.findByRoleAndStatus(Role.ROLE_USER, UserStatus.ACTIVE);
-        for (User user : users) {
-            try {
-                System.out.println("Generando factura para usuario: " + user.getIdUser());
-                // Llamamos a generateBill para cada usuario y añadimos la factura generada a la lista
+        List<User> activeUsers = userRepository.findByRoleAndStatus(Role.ROLE_USER, UserStatus.ACTIVE);
+        activeUsers.forEach(user -> generateBillForUser(user, idPeriod));
+    }
+
+    private void generateBillForUser(User user, Long idPeriod) {
+        if (user != null) {
+            Meter meter = meterRepository.findMeterByUserId(user.getIdUser());
+            if (meter != null && !billRepository.existsByIdMeterAndIdPeriod(meter.getIdMeter(), idPeriod)) {
                 generateBill(user.getIdUser(), idPeriod);
-            } catch (Exception e) {
-                // Manejo de errores si es necesario (por ejemplo, si faltan lecturas)
-                System.out.println("Error al generar la factura para el usuario " + user.getIdUser() + ": " + e.getMessage());
             }
         }
     }

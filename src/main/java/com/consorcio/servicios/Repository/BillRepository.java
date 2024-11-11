@@ -41,4 +41,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query("UPDATE Bill b SET b.paidStatus = NOT b.paidStatus WHERE b.idBill = :idBill")
     void togglePaidStatusById(@Param("idBill") Long idBill);
 
+    @Query("SELECT COUNT(b) > 0 FROM Bill b " +
+            "JOIN Reading r ON b.idReading = r.idReading " +
+            "WHERE b.idMeter = :idMeter AND r.idPeriod = :idPeriod")
+    boolean existsByIdMeterAndIdPeriod(@Param("idMeter") Long idMeter, @Param("idPeriod") Long idPeriod);
+
 }

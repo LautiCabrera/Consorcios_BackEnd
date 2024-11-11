@@ -27,15 +27,41 @@ public interface ReadingRepository extends JpaRepository<Reading, Long> {
     List<ReadReadingDto> findReadingsByUserId(@Param("idUser") Long idUser);
 
     //Obtiene la lectura actual
-    @Query("SELECT r FROM Reading r WHERE r.idMeter = (SELECT res.idMeter FROM Residence res WHERE res.idUser = :idUser) AND r.idPeriod = :idPeriod ORDER BY r.dateRegister DESC")
-    Reading findCurrentReadingByMeterAndPeriod(@Param("idUser") Long idUser, @Param("idPeriod") Long idPeriod);
+    @Query(
+            "SELECT r " +
+                    "FROM Reading r " +
+                    "WHERE r.idMeter = (" +
+                    "    SELECT res.idMeter " +
+                    "    FROM Residence res " +
+                    "    WHERE res.idUser = :idUser" +
+                    ") " +
+                    "AND r.idPeriod = :idPeriod " +
+                    "ORDER BY r.dateRegister DESC")
+    Reading findCurrentReadingByMeterAndPeriod(
+            @Param("idUser") Long idUser,
+            @Param("idPeriod") Long idPeriod
+    );
 
-    //Obtiene la lectura anterior
-    @Query("SELECT r FROM Reading r WHERE r.idMeter = (SELECT res.idMeter FROM Residence res WHERE res.idUser = :idUser) "
-            + "AND r.dateRegister < (SELECT MAX(rr.dateRegister) FROM Reading rr "
-            + "WHERE rr.idMeter = (SELECT res.idMeter FROM Residence res WHERE res.idUser = :idUser) "
-            + "AND rr.idPeriod = :idPeriod) "
-            + "ORDER BY r.dateRegister DESC")
-    Reading findPreviousReadingByMeter(@Param("idUser") Long idUser, @Param("idPeriod") Long idPeriod);
+    // Obtiene la lectura anterior
+    @Query(
+            "SELECT r " +
+                    "FROM Reading r " +
+                    "WHERE r.idMeter = (" +
+                    "    SELECT res.idMeter " +
+                    "    FROM Residence res " +
+                    "    WHERE res.idUser = :idUser" +
+                    ") " +
+                    "AND r.idPeriod = :idPeriod " +
+                    "AND r.dateRegister < (" +
+                    "    SELECT MAX(rr.dateRegister) " +
+                    "    FROM Reading rr " +
+                    "    WHERE rr.idMeter = r.idMeter " +
+                    "    AND rr.idPeriod = :idPeriod" +
+                    ") " +
+                    "ORDER BY r.dateRegister DESC")
+    Reading findPreviousReadingByMeter(
+            @Param("idUser") Long idUser,
+            @Param("idPeriod") Long idPeriod
+    );
 
 }

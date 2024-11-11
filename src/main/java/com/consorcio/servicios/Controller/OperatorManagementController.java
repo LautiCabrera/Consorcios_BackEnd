@@ -1,13 +1,10 @@
 package com.consorcio.servicios.Controller;
 
 import com.consorcio.servicios.Dto.FeeDto;
-import com.consorcio.servicios.Dto.Read.BillDto;
-import com.consorcio.servicios.Dto.Read.PaymentDto;
-import com.consorcio.servicios.Dto.Read.ReadPeriodDto;
-import com.consorcio.servicios.Dto.Read.ReadReadingDto;
+import com.consorcio.servicios.Dto.Read.*;
 import com.consorcio.servicios.Dto.ReadingDto;
+import com.consorcio.servicios.Dto.ResidenceDto;
 import com.consorcio.servicios.Dto.UserDto;
-import com.consorcio.servicios.Entity.Bill;
 import com.consorcio.servicios.Entity.Location;
 import com.consorcio.servicios.Entity.Modality;
 import com.consorcio.servicios.Enums.UserStatus;
@@ -43,6 +40,8 @@ public class OperatorManagementController {
     private FeeService feeService;
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private ResidenceService residenceService;
 
     // Gestion de usuarios
     @GetMapping("/users")
@@ -181,7 +180,7 @@ public class OperatorManagementController {
         }
     }
 
-    @PostMapping("/modality-register")
+    @PostMapping("/register-modality")
     public WebApiResponse<Void> createModality(@RequestBody Modality modality) {
         try {
             modalityService.createModality(modality);
@@ -192,7 +191,7 @@ public class OperatorManagementController {
         }
     }
 
-    @PostMapping("/modality/{idModality}")
+    @PutMapping("/update-modality/{idModality}")
     public WebApiResponse<Void> updateModality(@PathVariable Long idModality, @RequestBody Modality modality) {
         try {
             modality.setIdModality(idModality);
@@ -239,12 +238,10 @@ public class OperatorManagementController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
-
-    // Gestion de Medidores
     
     // Gestion de facturas 
     @PostMapping("/bill/generate/{idUser}/{idPeriod}")
-    public WebApiResponse<Bill> generateBill(@PathVariable Long idUser, @PathVariable Long idPeriod) {
+    public WebApiResponse<Void> generateBill(@PathVariable Long idUser, @PathVariable Long idPeriod) {
         try {
             billService.generateBill(idUser, idPeriod);
             return WebApiResponse.success(null, "Factura generada exitosamente", HttpStatus.OK.value());
@@ -255,7 +252,7 @@ public class OperatorManagementController {
     }
 
     @PostMapping("/bill/generate/{idPeriod}")
-    public WebApiResponse<Void> generateBillForAllMeter(Long idPeriod) {
+    public WebApiResponse<Void> generateBillForAllMeter(@PathVariable Long idPeriod) {
         try {
             billService.generateBillForAllMeters(idPeriod);
             return WebApiResponse.success(null, "Facturas generadas exitosamente", HttpStatus.OK.value());
@@ -316,6 +313,39 @@ public class OperatorManagementController {
             return WebApiResponse.success(locationService.getLocationsByProvince(14L), "Locaciones obtenidas exitosamente", HttpStatus.OK.value());
         } catch (Exception e) {
             return WebApiResponse.error("Error al obtener locaciones", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    //Gestion de Residencias y medidores
+    @GetMapping("/residences")
+    public WebApiResponse<List<ReadResidenceDto>> getAllResidences() {
+        try {
+            return WebApiResponse.success(residenceService.getAllResidences(), "Residencias obtenidas exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al obtener residencias", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @PostMapping("/register-residence")
+    public WebApiResponse<Void> createResidence(@RequestBody ResidenceDto residenceDto) {
+        try {
+            residenceService.createResidence(residenceDto);
+            return WebApiResponse.success(null, "Residencia creada exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al crear residencia", e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+    }
+
+    @PutMapping("/update-residence/{idResidence}")
+    public WebApiResponse<Void> updateResidence(@PathVariable Long idResidence, @RequestBody ResidenceDto residenceDto) {
+        try {
+            residenceService.updateResidence(idResidence, residenceDto);
+            return WebApiResponse.success(null, "Residencia actualizada exitosamente", HttpStatus.OK.value());
+        } catch (Exception e) {
+            return WebApiResponse.error("Error al actualizar residencia", e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }

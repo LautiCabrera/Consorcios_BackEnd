@@ -26,15 +26,9 @@ public class Residence {
     private Long number;
 
     @Column(nullable = false)
-    private float latitude;
-
-    @Column(nullable = false)
-    private float longitude;
-
-    @Column(nullable = false)
     private Long idUser;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long idMeter;
 
     @Column(nullable = false)
