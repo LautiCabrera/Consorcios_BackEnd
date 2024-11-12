@@ -22,8 +22,8 @@ public interface ResidenceRepository extends JpaRepository<Residence, Long> {
             + "FROM Residence r "
             + "JOIN User u ON r.idUser = u.idUser "
             + "JOIN Location l ON r.idLocation = l.idLocation "
-            + "JOIN Meter m ON r.idMeter = m.idMeter "
-            + "JOIN Fee f ON m.idFee = f.idFee ")
+            + "LEFT JOIN Meter m ON r.idMeter = m.idMeter "
+            + "LEFT JOIN Fee f ON m.idFee = f.idFee ")
     List<ReadResidenceDto> findAllResidences();
 
 }
