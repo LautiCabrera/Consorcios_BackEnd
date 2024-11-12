@@ -24,4 +24,8 @@ public class ReadResidenceDto {
     @NotBlank
     private Long idFee;
 
+    public ReadResidenceDto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -24,4 +24,3 @@ Este documento contiene los detalles de las pruebas unitarias realizadas para el
    - **Resultado obtenido**: Se devolvió una lista vacía, como se esperaba.
 
 ---
-

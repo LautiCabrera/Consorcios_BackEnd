@@ -3,9 +3,11 @@ package com.consorcio.servicios.Dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ResidenceDto {
 
     private Long idUser;
