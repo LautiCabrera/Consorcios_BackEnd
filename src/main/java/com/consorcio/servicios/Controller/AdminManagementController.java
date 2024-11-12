@@ -4,11 +4,13 @@ import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "Modulo de Administradores", description = "Operaciones relacionadas con la gestión de administradores, como el registro de nuevos administradores.")
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class AdminManagementController {

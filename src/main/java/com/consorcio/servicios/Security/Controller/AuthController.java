@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.*;
 import com.consorcio.servicios.Security.Service.RecoverPassService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@Tag(name = "Modulo de Autenticación", description = "Operaciones relacionadas con la autenticación de usuarios, como el inicio de sesión, recuperación de contraseña y restablecimiento de contraseña.")
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
@@ -16,6 +19,7 @@ public class AuthController {
     private final AuthService authService;
     private final RecoverPassService recoverPassService;
 
+    @Operation(summary = "Inicio de sesión", description = "Permite a los usuarios iniciar sesión en el sistema con sus credenciales.")
     @PostMapping("/login")
     public WebApiResponse<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
         try {
@@ -27,6 +31,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Recuperar contraseña", description = "Envía un correo electrónico con instrucciones para restablecer la contraseña del usuario.")
     @PostMapping("/forgot")
     public WebApiResponse<Void> forgotPassword(@RequestBody ForgotPassDto request) {
         try {
@@ -39,6 +44,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Restablecer contraseña", description = "Permite al usuario cambiar su contraseña después de haber recibido las instrucciones por correo.")
     @PostMapping("/reset")
     public WebApiResponse<Void> resetPassword(@RequestBody RecoverPassRequestDto request) {
         try {

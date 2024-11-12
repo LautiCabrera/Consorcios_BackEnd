@@ -13,6 +13,8 @@ import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
 import com.consorcio.servicios.Service.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Modulo de operario", description = "Operaciones relacionadas con la gestión de usuarios, incluidas residencias, modalidades, tarifas, facturación y pagos. Todas las operaciones que puede hacer un operario")
 @RequestMapping("/api/v1/operator")
 public class OperatorManagementController {
 
@@ -44,6 +47,7 @@ public class OperatorManagementController {
     private ResidenceService residenceService;
 
     // Gestion de usuarios
+    @Operation(summary = "Obtener todos los usuarios", description = "Recupera una lista de todos los usuarios registrados en el sistema.")
     @GetMapping("/users")
     public WebApiResponse<List<UserDto>> getAllUsers() {
         try {
@@ -55,6 +59,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Obtener usuarios activos", description = "Recupera una lista de todos los usuarios activos en el sistema.")
     @GetMapping("/users-active")
     public WebApiResponse<List<UserDto>> getUsersActives() {
         try {
@@ -66,6 +71,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Registrar operador", description = "Registra un nuevo operador en el sistema.")
     @PostMapping("/register-operator")
     public WebApiResponse<Void> operatorRegister(@RequestBody RegisterRequestDto request) {
         try {
@@ -77,6 +83,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Registrar usuario", description = "Registra un nuevo usuario en el sistema.")
     @PostMapping("/register-user")
     public WebApiResponse<Void> userRegister(@RequestBody RegisterRequestDto request) {
         try {
@@ -88,6 +95,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Actualizar usuario", description = "Actualiza la información de un usuario específico en el sistema.")
     @PutMapping("/update-user")
     public WebApiResponse<Void> updateUser(@RequestParam("idUser") Long idUser, @RequestBody UserDto userDto) {
         try {
@@ -99,6 +107,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Cambiar estado de activación de usuario", description = "Activa o desactiva un usuario cambiando su estado en el sistema.")
     @PutMapping("/toggle-activation")
     public WebApiResponse<Void> toggleActivation(@RequestParam("id") Long id,
             @RequestParam("status") UserStatus status) {
@@ -112,6 +121,7 @@ public class OperatorManagementController {
     }
 
     // Gestión de lecturas del usuario
+    @Operation(summary = "Obtener todas las lecturas", description = "Recupera una lista de todas las lecturas realizadas por los operarios.")
     @GetMapping("/readings")
     public WebApiResponse<List<ReadReadingDto>> getAllReadings() {
         try {
@@ -123,6 +133,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Obtener lecturas por ID de usuario", description = "Recupera una lista de todas las lecturas realizadas por un operario de un usuario específico.")
     @GetMapping("/readings/{idUser}")
     public WebApiResponse<List<ReadReadingDto>> getReadingsByUserId(@PathVariable long idUser) {
         try {
@@ -134,6 +145,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Registrar nueva lectura", description = "Crea una nueva lectura asociada a un usuario específico.")
     @PostMapping("/register-reading/{idUser}")
     public WebApiResponse<Void> createReading(@PathVariable long idUser, @RequestBody ReadingDto reading) {
         try {
@@ -145,6 +157,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Actualizar lectura", description = "Actualiza la información de una lectura existente.")
     @PutMapping("/update-reading/{idReading}")
     public WebApiResponse<Void> updateReading(@PathVariable long idReading, @RequestBody ReadingDto reading) {
         try {
@@ -157,6 +170,7 @@ public class OperatorManagementController {
     }
 
     // Gestion de Modalidades
+    @Operation(summary = "Obtener todas las modalidades", description = "Recupera una lista de todas las modalidades disponibles en el sistema.")
     @GetMapping("/modalities")
     public WebApiResponse<List<Modality>> getAllModalities() {
         try {
@@ -168,6 +182,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Obtener modalidad por ID", description = "Recupera los detalles de una modalidad específica por su ID.")
     @GetMapping("/modality/{idModality}")
     public WebApiResponse<Modality> getModalityById(@PathVariable Long idModality) {
         try {
@@ -180,6 +195,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Registrar nueva modalidad", description = "Crea una nueva modalidad en el sistema.")
     @PostMapping("/register-modality")
     public WebApiResponse<Void> createModality(@RequestBody Modality modality) {
         try {
@@ -191,6 +207,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Actualizar modalidad", description = "Actualiza los detalles de una modalidad existente.")
     @PutMapping("/update-modality/{idModality}")
     public WebApiResponse<Void> updateModality(@PathVariable Long idModality, @RequestBody Modality modality) {
         try {
@@ -203,6 +220,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Eliminar modalidad", description = "Elimina una modalidad del sistema por su ID.")
     @DeleteMapping("/modality/{idModality}")
     public WebApiResponse<Void> deleteModality(@PathVariable Long idModality) {
         try {
@@ -215,6 +233,7 @@ public class OperatorManagementController {
     }
 
     // Gestion de Periodos
+    @Operation(summary = "Obtener periodos por modalidad", description = "Recupera una lista de periodos asociados a una modalidad específica.")
     @GetMapping("/period/{idModality}")
     public WebApiResponse<List<ReadPeriodDto>> getPeriodByIdModality(@PathVariable Long idModality) {
         try {
@@ -227,6 +246,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Obtener periodos activos", description = "Recupera una lista de los periodos activos en el sistema.")
     @GetMapping("/periods-actives")
     public WebApiResponse<List<ReadPeriodDto>> getPeriodsActive() {
         try {
@@ -240,6 +260,7 @@ public class OperatorManagementController {
     }
     
     // Gestion de facturas 
+    @Operation(summary = "Generar factura", description = "Genera una factura para un usuario en un periodo específico.")
     @PostMapping("/bill/generate/{idUser}/{idPeriod}")
     public WebApiResponse<Void> generateBill(@PathVariable Long idUser, @PathVariable Long idPeriod) {
         try {
@@ -251,6 +272,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Generar facturas para todos los medidores", description = "Genera facturas para todos los medidores en un periodo específico.")
     @PostMapping("/bill/generate/{idPeriod}")
     public WebApiResponse<Void> generateBillForAllMeter(@PathVariable Long idPeriod) {
         try {
@@ -262,6 +284,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Obtener factura por usuario y periodo", description = "Recupera los detalles de la factura para un usuario específico y un periodo determinado.")
     @GetMapping("/bill/{idUser}/{idPeriod}")
     public WebApiResponse<BillDto> getBillByIdUserAndIdPeriod(@PathVariable Long idUser, @PathVariable Long idPeriod) {
         try {
@@ -272,7 +295,8 @@ public class OperatorManagementController {
                     HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
-
+    
+    @Operation(summary = "Obtener pagos por usuario", description = "Recupera los detalles de los pagos realizados por un usuario específico.")
     @GetMapping("/payment/{idUser}")
     public WebApiResponse<List<PaymentDto>> getPaymentsByUserId(@PathVariable Long idUser) {
         try {
@@ -284,6 +308,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Cambiar estado de pago", description = "Cambia el estado de pago de una factura específica utilizando su ID.")
     @PostMapping("/payment/{idBill}")
     public WebApiResponse<Void> changePaymentStatus(@PathVariable Long idBill) {
         try {
@@ -296,6 +321,7 @@ public class OperatorManagementController {
     }
 
     //Gestion de tarifas
+    @Operation(summary = "Obtener todas las tarifas", description = "Devuelve una lista de todas las tarifas disponibles.")
     @GetMapping("/fee")
     public WebApiResponse<List<FeeDto>> getAllFee() {
         try {
@@ -307,6 +333,7 @@ public class OperatorManagementController {
     }
 
     //Gestion de localidades
+    @Operation(summary = "Obtener locaciones por provincia", description = "Devuelve una lista de locaciones para la provincia especificada.")
     @GetMapping("/locations")
     public WebApiResponse<List<Location>> getProvinceLocations() {
         try {
@@ -318,6 +345,7 @@ public class OperatorManagementController {
     }
 
     //Gestion de Residencias y medidores
+    @Operation(summary = "Obtener todas las residencias", description = "Devuelve una lista de todas las residencias registradas en el sistema.")
     @GetMapping("/residences")
     public WebApiResponse<List<ReadResidenceDto>> getAllResidences() {
         try {
@@ -328,6 +356,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Registrar una nueva residencia", description = "Permite crear una nueva residencia en el sistema proporcionando la información necesaria.")
     @PostMapping("/register-residence")
     public WebApiResponse<Void> createResidence(@RequestBody ResidenceDto residenceDto) {
         try {
@@ -339,6 +368,7 @@ public class OperatorManagementController {
         }
     }
 
+    @Operation(summary = "Actualizar una residencia existente", description = "Permite actualizar los detalles de una residencia existente en el sistema, identificada por su ID.")
     @PutMapping("/update-residence/{idResidence}")
     public WebApiResponse<Void> updateResidence(@PathVariable Long idResidence, @RequestBody ResidenceDto residenceDto) {
         try {
