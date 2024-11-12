@@ -10,6 +10,11 @@ public class DetailBillDto {
 
     private Long idBill;
     private Date dateBill;
+    private String fee;
+    private int consumptionMax;
+    private int priceFee;
+    private Double consumed;
+    private Double surplus;
     private Double total;
 
 }

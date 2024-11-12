@@ -8,14 +8,14 @@ import lombok.Data;
 public class ConceptBillDto {
 
     private Double normalConsumption;
-    private Long socialQuota;
+    private Double socialQuota;
     private Double surplus;
-    private Long interests;
-    private Long fines;
-    private Long reconnection;
-    private Long connection;
-    private Long materials;
-    private Long others;
-    private Long discount;
+    private Double interests;
+    private Double fines;
+    private Double reconnection;
+    private Double connection;
+    private Double materials;
+    private Double others;
+    private Double discount;
 
 }

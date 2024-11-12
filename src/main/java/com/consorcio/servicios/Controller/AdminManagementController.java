@@ -4,6 +4,7 @@ import com.consorcio.servicios.Security.Config.WebApiResponse;
 import com.consorcio.servicios.Security.Dto.RegisterRequestDto;
 import com.consorcio.servicios.Security.Enums.Role;
 import com.consorcio.servicios.Security.Service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class AdminManagementController {
 
     private final AuthService authService;
 
+    @Operation(summary = "Registrar Administrador", description = "Registra un nuevo administrador en el sistema.")
     @PostMapping("/register")
     public WebApiResponse<Void> adminRegister(@RequestBody RegisterRequestDto request) {
         try {

@@ -30,35 +30,41 @@ public class Bill {
     @Column(name = "id_reading")
     private Long idReading;
 
+    @Column(name = "consumption")
+    private Double consumption;
+
     @Column(name = "normal_consumption")
     private Double normalConsumption;
 
     @Column(name = "social_quota")
-    private Long socialQuota;
+    private Double socialQuota;
 
     @Column(name = "surplus")
     private Double surplus;
 
+    @Column(name = "surplus_price")
+    private Double surplusPrice;
+
     @Column(name = "interests")
-    private Long interests;
+    private Double interests;
 
     @Column(name = "fines")
-    private Long fines;
+    private Double fines;
 
     @Column(name = "reconnection")
-    private Long reconnection;
+    private Double reconnection;
 
     @Column(name = "connection")
-    private Long connection;
+    private Double connection;
 
     @Column(name = "materials")
-    private Long materials;
+    private Double materials;
 
     @Column(name = "others")
-    private Long others;
+    private Double others;
 
     @Column(name = "discount")
-    private Long discount;
+    private Double discount;
 
     @Column(name = "total")
     private Double total;

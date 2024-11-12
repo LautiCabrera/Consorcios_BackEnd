@@ -55,11 +55,13 @@ public class BillServiceImpl implements BillService {
         // Obtener la lectura anterior, si existe
         Reading previousReading = readingRepository.findPreviousReadingByMeter(idUser, idPeriod);
 
-        double consumption = 0; // Inicializamos el consumo
+        double consumption = 0;
 
-        // Si existe una lectura anterior, calculamos el consumo
+        // Si existe una lectura anterior se realiza la resta, si no se mantiene la actual
         if (previousReading != null) {
             consumption = currentReading.getReading() - previousReading.getReading();
+        } else {
+            consumption = currentReading.getReading();
         }
 
         // Obtener el medidor (Meter) para el idUser dado
@@ -79,12 +81,12 @@ public class BillServiceImpl implements BillService {
         double consumptionMax = fee.getConsumptionMax();
 
         // Calcular total basado en el consumo y tarifa
-        double normalConsumption = Math.min(consumption, consumptionMax);
         double surplus = Math.max(consumption - consumptionMax, 0);
-        double total = price + (surplus > 0 ? calculateSurplusCharge(surplus) : 0);
+        double surplusPrice = (surplus > 0 ? calculateSurplusCharge(surplus) : 0);
+        double total = price + surplusPrice;
 
         // Variable para completar otros campos de la factura
-        long completar = 0;
+        double completar = 0D;
 
         CustomUserDetails currentUser = Authenticated.getAuthenticatedUser();
 
@@ -92,9 +94,11 @@ public class BillServiceImpl implements BillService {
         Bill bill = Bill.builder()
                 .idMeter(meter.getIdMeter())
                 .idReading(currentReading.getIdReading())
-                .normalConsumption(normalConsumption)
+                .consumption(consumption)
                 .surplus(surplus)
-                .socialQuota(completar)
+                .surplusPrice(surplusPrice)
+                .socialQuota(price)
+                .normalConsumption(completar)
                 .interests(completar)
                 .fines(completar)
                 .reconnection(completar)
@@ -111,22 +115,22 @@ public class BillServiceImpl implements BillService {
         bill.setIdUserRegister(currentUser.getUser().getIdUser());
         bill.setIdUserUpdate(currentUser.getUser().getIdUser());
 
-        billRepository.save(bill);
+        if (!billRepository.existsByIdMeterAndIdPeriod(meter.getIdMeter(), idPeriod)) {
+            billRepository.save(bill);
+        }
     }
 
     @Override
     public void generateBillForAllMeters(Long idPeriod) {
         List<User> activeUsers = userRepository.findByRoleAndStatus(Role.ROLE_USER, UserStatus.ACTIVE);
-        activeUsers.forEach(user -> generateBillForUser(user, idPeriod));
-    }
-
-    private void generateBillForUser(User user, Long idPeriod) {
-        if (user != null) {
-            Meter meter = meterRepository.findMeterByUserId(user.getIdUser());
-            if (meter != null && !billRepository.existsByIdMeterAndIdPeriod(meter.getIdMeter(), idPeriod)) {
-                generateBill(user.getIdUser(), idPeriod);
+        activeUsers.forEach(user -> {
+            if (user != null) {
+                Meter meter = meterRepository.findMeterByUserId(user.getIdUser());
+                if (meter != null) {
+                    generateBill(user.getIdUser(), idPeriod);
+                }
             }
-        }
+        });
     }
 
     @Override
